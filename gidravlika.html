@@ -260,7 +260,7 @@
     if(Q_m3s <= 0 || D_m <= 0) return {v:0, loss_mm:0};
     const area = Math.PI * D_m * D_m / 4;
     const v = Q_m3s / area;
-    const nu = 1.004e-:
+    const nu = 1.004e-6;
     const Re = v * D_m / nu;
     let lambda;
     if(Re <= 0) lambda = 0;
@@ -315,7 +315,7 @@
     const n = linya.rows.length;
     const cum = new Array(n).fill(0);
     for(let i=n-1;i>=0;i--){
-+      cum[i] = (i===n-1?0:cum[i+1]) + (parseFloat(linya.rows[i].q)||0);
+      cum[i] = (i===n-1?0:cum[i+1]) + (parseFloat(linya.rows[i].q)||0);
     }
     let totalMm = 0;
     const details = linya.rows.map(function(r, i){

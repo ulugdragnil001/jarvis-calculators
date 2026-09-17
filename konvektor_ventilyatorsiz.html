@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Konvektor (ventilyatorsiz)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0F1A; --surface:#101828; --surface-2:#141F33; --border:#223049; --border-soft:#1A2740;
+    --text:#E8EDF7; --text-muted:#8394AD; --text-faint:#54637E;
+    --accent:#C9A227; --accent-soft:rgba(201,162,39,0.12); --accent-strong:#E6C24E;
+    --water:#3B9EFF; --water-soft:rgba(59,158,255,0.12);
+    --computed-bg:#0D1626; --radius:10px;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#F3F6FB; --surface:#FFFFFF; --surface-2:#F7FAFD; --border:#D8E1EE; --border-soft:#E4EAF3;
+      --text:#101828; --text-muted:#5B6B85; --text-faint:#8C99B0;
+      --accent:#9C7C10; --accent-soft:rgba(156,124,16,0.08); --accent-strong:#7A600C;
+      --water:#1E7FE0; --water-soft:rgba(30,127,224,0.08);
+      --computed-bg:#EEF2F8;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A0F1A; --surface:#101828; --surface-2:#141F33; --border:#223049; --border-soft:#1A2740;
+    --text:#E8EDF7; --text-muted:#8394AD; --text-faint:#54637E;
+    --accent:#C9A227; --accent-soft:rgba(201,162,39,0.12); --accent-strong:#E6C24E;
+    --water:#3B9EFF; --water-soft:rgba(59,158,255,0.12);
+    --computed-bg:#0D1626;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:36px;
+  }
+  .app{max-width:720px;margin:0 auto;padding:14px 12px 0;}
+  .topbar{display:flex; align-items:center; gap:10px; padding:6px 2px 14px;}
+  .topbar .icon-back{
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--surface); color:var(--text-muted); flex-shrink:0; font-size:16px;
+  }
+  .topbar .title{font-size:16px; font-weight:600;}
+  .topbar .subtitle{font-size:12px; color:var(--text-muted); margin-top:1px;}
+  .section-label{
+    font-size:11.5px; font-weight:700; color:var(--accent);
+    letter-spacing:0.02em; margin:18px 2px 8px;
+  }
+  .section-label:first-of-type{margin-top:4px;}
+  .card{
+    background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius);
+    padding:12px; margin-bottom:10px;
+  }
+  .field-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .field{display:flex; flex-direction:column; gap:5px;}
+  .field label{font-size:11px; color:var(--text-muted); font-weight:500; line-height:1.3;}
+  .field .unit{color:var(--text-faint); font-weight:400;}
+  .field input{
+    background:var(--bg); border:1px solid var(--border); border-radius:7px; color:var(--text);
+    font-family:'JetBrains Mono',monospace; font-size:14px; padding:9px 10px; width:100%;
+  }
+  .field input:focus{outline:none; border-color:var(--accent); background:var(--accent-soft);}
+  .result-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:9px 0; border-bottom:1px solid var(--border-soft); gap:10px;
+  }
+  .result-row:last-child{border-bottom:none;}
+  .result-row .k{font-size:12.5px; color:var(--text-muted); line-height:1.35;}
+  .result-row .v{
+    font-family:'JetBrains Mono',monospace; font-size:14.5px; font-weight:700; color:var(--text);
+    white-space:nowrap; text-align:right;
+  }
+  .result-row .v .unit{font-size:11px; color:var(--text-faint); font-weight:400; margin-left:3px;}
+  .result-row.highlight .v{color:var(--accent-strong); font-size:18px;}
+  .warn{
+    background:rgba(242,85,90,0.12); color:#F2555A; font-size:12px; font-weight:500;
+    border-radius:8px; padding:10px 11px; margin-bottom:10px;
+  }
+  .note{font-size:11.5px; color:var(--text-faint); padding:14px 4px 0; line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="icon-back">←</div>
+    <div>
+      <div class="title">Konvektor (ventilyatorsiz)</div>
+      <div class="subtitle">FC seriyasi — Teplopateriya boʻlimi</div>
+    </div>
+  </div>
+
+  <div class="section-label">Kirish parametrlari</div>
+  <div class="card">
+    <div class="field-grid">
+      <div class="field">
+        <label>Xona uchun kerakli quvvat <span class="unit">(Vt)</span></label>
+        <input type="number" id="q_loss" value="1600" min="0">
+      </div>
+      <div class="field">
+        <label>Xona harorati <span class="unit">(°C)</span></label>
+        <input type="number" id="t_room" value="18">
+      </div>
+    </div>
+    <div class="field-grid" style="margin-top:10px;">
+      <div class="field">
+        <label>Podacha harorati <span class="unit">(°C)</span></label>
+        <input type="number" id="t_pod" value="80">
+      </div>
+      <div class="field">
+        <label>Obratka harorati <span class="unit">(°C)</span></label>
+        <input type="number" id="t_obr" value="60">
+      </div>
+    </div>
+    <div class="field-grid" style="margin-top:10px;">
+      <div class="field">
+        <label>Kanalcha kengligi <span class="unit">(mavjud joyga qarab)</span></label>
+        <select id="width_sel">
+          <option value="22">22 sm</option>
+          <option value="32" selected>32 sm</option>
+          <option value="42">42 sm</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div id="warnBox"></div>
+
+  <div class="section-label">Tavsiya etilgan model</div>
+  <div class="card" id="box-result"></div>
+
+  <div class="note">
+    Katalogdagi barcha oʻlchamlar (kengligi 22/32/42 sm, balandligi 9–45 sm, uzunligi 80–500 sm) ΔT=50°C uchun berilgan nominal quvvatlar (EN16430). Boshqa ΔT uchun quvvat ishlab chiqaruvchining haqiqiy tuzatish jadvali (18–60°C oraligʻida) boʻyicha aniq hisoblanadi — chiziqli taxmin emas. Tavsiya — talabga javob beradigan eng kichik (eng kam ortiqcha quvvatli) model.
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const LENGTHS=[80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,320,340,360,380,400,420,440,460,480,500];
+  const ROWS=[
+    [22,9,[188.84,221.86,254.87,287.89,320.90,353.92,386.93,419.95,452.96,485.98,518.99,552.01,585.02,618.04,651.05,684.07,717.08,750.10,783.11,816.13,849.14,882.16,915.17,981.20,1047.23,1113.26,1179.29,1245.32,1311.35,1377.38,1443.41,1509.44,1575.47]],
+    [22,15,[271.78,319.80,367.81,415.83,463.85,511.87,559.89,607.90,655.92,703.94,751.96,799.97,847.99,896.01,944.03,992.04,1040.06,1088.08,1136.10,1184.11,1232.13,1280.15,1328.17,1424.20,1520.24,1616.27,1712.31,1808.34,1904.38,2000.41,2096.45,2192.48,2288.52]],
+    [32,9,[255.74,304.27,352.79,401.32,449.85,498.37,546.90,595.43,643.96,692.48,741.01,789.54,838.06,886.59,935.12,983.65,1032.17,1080.70,1129.23,1177.75,1226.28,1274.81,1323.34,1420.39,1517.44,1614.50,1711.55,1808.61,1905.66,2002.72,2099.77,2196.82,2293.88]],
+    [32,11,[266.51,316.70,366.89,417.08,467.27,517.46,567.64,617.83,668.02,718.21,768.40,818.59,868.78,918.97,969.16,1019.35,1069.54,1119.73,1169.92,1220.11,1270.30,1320.49,1370.68,1471.06,1571.44,1671.82,1772.20,1872.58,1972.95,2073.33,2173.71,2274.09,2374.47]],
+    [32,15,[405.40,476.77,548.14,619.52,690.89,762.26,833.64,905.01,976.38,1047.76,1119.13,1190.50,1261.87,1333.25,1404.62,1475.99,1547.37,1618.74,1690.11,1761.48,1832.86,1904.23,1975.60,2118.35,2261.10,2403.84,2546.59,2689.33,2832.08,2974.83,3117.57,3260.32,3403.06]],
+    [32,30,[597.90,702.79,807.69,912.58,1017.48,1122.37,1227.27,1332.16,1437.06,1541.95,1646.85,1751.74,1856.64,1961.53,2066.43,2171.32,2276.21,2381.11,2486.00,2590.90,2695.79,2800.69,2905.58,3115.37,3325.16,3534.95,3744.74,3954.53,4164.32,4374.11,4583.90,4793.69,5003.48]],
+    [32,45,[773.38,907.88,1042.38,1176.88,1311.38,1445.88,1580.38,1714.88,1849.38,1983.88,2118.38,2252.88,2387.38,2521.88,2656.38,2790.88,2925.38,3059.88,3194.38,3328.88,3463.38,3597.88,3732.38,4001.38,4270.38,4539.38,4808.39,5077.39,5346.39,5615.39,5884.39,6153.39,6422.39]],
+    [42,9,[308.03,361.60,415.17,468.74,522.31,575.88,629.45,683.02,736.59,790.16,843.74,897.31,950.88,1004.45,1058.02,1111.59,1165.16,1218.73,1272.30,1325.87,1379.44,1433.01,1486.58,1593.72,1700.86,1808.00,1915.15,2022.29,2129.43,2236.57,2343.71,2450.85,2557.99]],
+    [42,11,[373.49,439.01,504.54,570.06,635.59,701.11,766.63,832.16,897.68,963.21,1028.73,1094.26,1159.78,1225.30,1290.83,1356.35,1421.88,1487.40,1552.93,1618.45,1683.97,1749.50,1815.02,1946.07,2077.12,2208.17,2339.22,2470.27,2601.31,2732.36,2863.41,2994.46,3125.51]],
+    [42,15,[527.10,619.90,712.70,805.50,898.30,991.10,1083.90,1176.70,1269.50,1362.30,1455.10,1547.90,1640.71,1733.51,1826.31,1919.11,2011.91,2104.71,2197.51,2290.31,2383.11,2475.91,2568.71,2754.31,2939.91,3125.51,3311.11,3496.71,3682.31,3867.91,4053.51,4239.11,4424.71]],
+    [42,30,[779.01,915.68,1052.35,1189.02,1325.69,1462.36,1599.03,1735.70,1872.37,2009.04,2145.71,2282.38,2419.04,2555.71,2692.38,2829.05,2965.72,3102.39,3239.06,3375.73,3512.40,3649.07,3785.74,4059.07,4332.41,4605.75,4879.09,5152.43,5425.77,5699.10,5972.44,6245.78,6519.12]],
+    [42,45,[925.42,1087.78,1250.13,1412.49,1574.84,1737.20,1899.55,2061.91,2224.26,2386.62,2548.97,2711.33,2873.68,3036.04,3198.40,3360.75,3523.11,3685.46,3847.82,4010.17,4172.53,4334.88,4497.24,4821.95,5146.66,5471.37,5796.08,6120.79,6445.50,6770.21,7094.92,7419.63,7744.34]]
+  ];
+  const CORR=[[18.0,0.2385],[18.5,0.2472],[19.0,0.2560],[19.5,0.2650],[20.0,0.2740],[20.5,0.2831],[21.0,0.2923],[21.5,0.3017],[22.0,0.3111],[22.5,0.3206],[23.0,0.3303],[23.5,0.3400],[24.0,0.3498],[24.5,0.3598],[25.0,0.3698],[25.5,0.3799],[26.0,0.3902],[26.5,0.4005],[27.0,0.4109],[27.5,0.4215],[28.0,0.4321],[28.5,0.4429],[29.0,0.4537],[29.5,0.4646],[30.0,0.4757],[30.5,0.4868],[31.0,0.4981],[31.5,0.5094],[32.0,0.5209],[32.5,0.5324],[33.0,0.5441],[33.5,0.5558],[34.0,0.5677],[34.5,0.5796],[35.0,0.5917],[35.5,0.6038],[36.0,0.6161],[36.5,0.6284],[37.0,0.6409],[37.5,0.6534],[38.0,0.6661],[38.5,0.6788],[39.0,0.6917],[39.5,0.7046],[40.0,0.7177],[40.5,0.7309],[41.0,0.7441],[41.5,0.7575],[42.0,0.7709],[42.5,0.7845],[43.0,0.7982],[43.5,0.8119],[44.0,0.8258],[44.5,0.8397],[45.0,0.8538],[45.5,0.8680],[46.0,0.8822],[46.5,0.8966],[47.0,0.9111],[47.5,0.9256],[48.0,0.9403],[48.5,0.9551],[49.0,0.9700],[49.5,0.9849],[50.0,1.0000],[50.5,1.0152],[51.0,1.0304],[51.5,1.0458],[52.0,1.0613],[52.5,1.0769],[53.0,1.0925],[53.5,1.1083],[54.0,1.1242],[54.5,1.1402],[55.0,1.1563],[55.5,1.1724],[56.0,1.1887],[56.5,1.2051],[57.0,1.2216],[57.5,1.2382],[58.0,1.2549],[58.5,1.2716],[59.0,1.2885],[59.5,1.3055],[60.0,1.3226]];
+
+  const ids = ['q_loss','t_room','t_pod','t_obr'];
+  const inputs = {}; ids.forEach(function(id){ inputs[id]=document.getElementById(id); });
+  const widthSel = document.getElementById('width_sel');
+  const boxResult = document.getElementById('box-result');
+  const warnBox = document.getElementById('warnBox');
+
+  function num(id){ const v=parseFloat(inputs[id].value); return isNaN(v)?0:v; }
+  function fmt(v,d){ if(v===null||v===undefined||isNaN(v)) return '—'; d=d===undefined?0:d; return v.toFixed(d); }
+  function row(container,k,v,unit,hi){
+    const r=document.createElement('div'); r.className='result-row'+(hi?' highlight':'');
+    r.innerHTML='<span class="k">'+k+'</span><span class="v">'+v+(unit?'<span class="unit">'+unit+'</span>':'')+'</span>';
+    container.appendChild(r);
+  }
+
+  function correction(dT){
+    if(dT <= CORR[0][0]) return CORR[0][1];
+    if(dT >= CORR[CORR.length-1][0]) return CORR[CORR.length-1][1];
+    for(let i=0;i<CORR.length-1;i++){
+      const a=CORR[i], b=CORR[i+1];
+      if(dT>=a[0] && dT<=b[0]){
+        const t=(dT-a[0])/(b[0]-a[0]);
+        return a[1]+(b[1]-a[1])*t;
+      }
+    }
+    return 1;
+  }
+
+  function recalc(){
+    const q_loss = num('q_loss');
+    const dT = (num('t_pod')+num('t_obr'))/2 - num('t_room');
+
+    warnBox.innerHTML = '';
+    boxResult.innerHTML = '';
+    if(dT<=0){
+      warnBox.innerHTML = '<div class="warn">ΔT musbat boʻlishi kerak — haroratlarni tekshiring.</div>';
+      return;
+    }
+
+    const mult = correction(dT);
+    const chosenWidth = parseInt(widthSel.value,10);
+    let best = null;
+    ROWS.filter(function(r){ return r[0]===chosenWidth; }).forEach(function(r){
+      const width=r[0], height=r[1], values=r[2];
+      values.forEach(function(baseVal, li){
+        const qActual = baseVal*mult;
+        if(qActual < q_loss) return;
+        const cand = {width:width, height:height, length:LENGTHS[li], power:qActual, surplus:qActual-q_loss};
+        if(!best){ best=cand; return; }
+        if(cand.length < best.length){ best=cand; return; }
+        if(cand.length === best.length && cand.height < best.height){ best=cand; return; }
+        if(cand.length === best.length && cand.height === best.height && cand.surplus < best.surplus){ best=cand; }
+      });
+    });
+
+    row(boxResult, 'Harorat napori (ΔT)', fmt(dT,1), '°C');
+    row(boxResult, 'Tuzatish koeffitsienti', mult.toFixed(3));
+
+    if(!best){
+      row(boxResult, 'Natija', 'Bu kenglikdagi eng katta model ham yetarli emas — kengroq kanalcha yoki bir nechta konvektor kerak boʻladi', '');
+      return;
+    }
+
+    row(boxResult, 'Tavsiya etilgan oʻlcham', best.width+'×'+best.height+' sm', '', true);
+    row(boxResult, 'Uzunligi', best.length, 'sm');
+    row(boxResult, 'Haqiqiy quvvat', fmt(best.power,0), 'Vt');
+  }
+
+  ids.forEach(function(id){ inputs[id].addEventListener('input', recalc); });
+  widthSel.addEventListener('change', recalc);
+  recalc();
+})();
+</script>
+</body>
+</html>

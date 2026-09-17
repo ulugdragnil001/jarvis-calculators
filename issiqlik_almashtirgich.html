@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Issiqlik almashtirgich hisobi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0F1A; --surface:#101828; --surface-2:#141F33; --border:#223049; --border-soft:#1A2740;
+    --text:#E8EDF7; --text-muted:#8394AD; --text-faint:#54637E;
+    --accent:#22B8CF; --accent-soft:rgba(34,184,207,0.12); --accent-strong:#5FD6E8;
+    --water:#3B9EFF; --water-soft:rgba(59,158,255,0.12);
+    --computed-bg:#0D1626; --radius:10px;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#F3F6FB; --surface:#FFFFFF; --surface-2:#F7FAFD; --border:#D8E1EE; --border-soft:#E4EAF3;
+      --text:#101828; --text-muted:#5B6B85; --text-faint:#8C99B0;
+      --accent:#0E8FA6; --accent-soft:rgba(14,143,166,0.08); --accent-strong:#0B7183;
+      --water:#1E7FE0; --water-soft:rgba(30,127,224,0.08);
+      --computed-bg:#EEF2F8;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A0F1A; --surface:#101828; --surface-2:#141F33; --border:#223049; --border-soft:#1A2740;
+    --text:#E8EDF7; --text-muted:#8394AD; --text-faint:#54637E;
+    --accent:#22B8CF; --accent-soft:rgba(34,184,207,0.12); --accent-strong:#5FD6E8;
+    --water:#3B9EFF; --water-soft:rgba(59,158,255,0.12);
+    --computed-bg:#0D1626;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:36px;
+  }
+  .app{max-width:720px;margin:0 auto;padding:14px 12px 0;}
+  .topbar{display:flex; align-items:center; gap:10px; padding:6px 2px 14px;}
+  .topbar .icon-back{
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--surface); color:var(--text-muted); flex-shrink:0; font-size:16px;
+  }
+  .topbar .title{font-size:16px; font-weight:600;}
+  .topbar .subtitle{font-size:12px; color:var(--text-muted); margin-top:1px;}
+  .section-label{
+    font-size:11.5px; font-weight:700; color:var(--accent);
+    letter-spacing:0.02em; margin:18px 2px 8px;
+  }
+  .section-label:first-of-type{margin-top:4px;}
+  .card{
+    background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius);
+    padding:12px; margin-bottom:10px;
+  }
+  .field-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .field{display:flex; flex-direction:column; gap:5px;}
+  .field.full{grid-column:1/-1;}
+  .field label{font-size:11px; color:var(--text-muted); font-weight:500; line-height:1.3;}
+  .field .unit{color:var(--text-faint); font-weight:400;}
+  .field input, .field select{
+    background:var(--bg); border:1px solid var(--border); border-radius:7px; color:var(--text);
+    font-family:'JetBrains Mono',monospace; font-size:13.5px; padding:9px 10px; width:100%;
+  }
+  .field select{font-family:'Inter'; font-size:13px;}
+  .field input:focus, .field select:focus{outline:none; border-color:var(--accent); background:var(--accent-soft);}
+  .result-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:9px 0; border-bottom:1px solid var(--border-soft); gap:10px;
+  }
+  .result-row:last-child{border-bottom:none;}
+  .result-row .k{font-size:12.5px; color:var(--text-muted); line-height:1.35;}
+  .result-row .v{
+    font-family:'JetBrains Mono',monospace; font-size:14.5px; font-weight:700; color:var(--text);
+    white-space:nowrap; text-align:right;
+  }
+  .result-row .v .unit{font-size:11px; color:var(--text-faint); font-weight:400; margin-left:3px;}
+  .result-row.highlight .v{color:var(--accent-strong); font-size:18px;}
+  .note{font-size:11.5px; color:var(--text-faint); padding:14px 4px 0; line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="icon-back">←</div>
+    <div>
+      <div class="title">Issiqlik almashtirgich hisobi</div>
+      <div class="subtitle">Basseyn uchun — Teplopateriya boʻlimi</div>
+    </div>
+  </div>
+
+  <div class="section-label">Basseyn oʻlchamlari</div>
+  <div class="card">
+    <div class="field-grid">
+      <div class="field">
+        <label>Uzunligi <span class="unit">(m)</span></label>
+        <input type="number" id="L" value="3" min="0" step="0.1">
+      </div>
+      <div class="field">
+        <label>Kengligi <span class="unit">(m)</span></label>
+        <input type="number" id="W" value="5" min="0" step="0.1">
+      </div>
+    </div>
+    <div class="field-grid" style="margin-top:10px;">
+      <div class="field">
+        <label>Chuqurligi <span class="unit">(m)</span></label>
+        <input type="number" id="Dep" value="1.5" min="0" step="0.1">
+      </div>
+      <div class="field">
+        <label>Basseyn joylashgan joyi</label>
+        <select id="location">
+          <option value="1000">Ochiq havoda (toʻliq ochiq)</option>
+          <option value="620">Ochiq havoda (qisman ochiq)</option>
+          <option value="520">Ochiq havoda (toʻliq yopilgan)</option>
+          <option value="180">Yopiq bino ichida</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Isitish sharoitlari</div>
+  <div class="card">
+    <div class="field-grid">
+      <div class="field">
+        <label>Boshlangʻich harorat <span class="unit">(°C)</span></label>
+        <input type="number" id="t1" value="10">
+      </div>
+      <div class="field">
+        <label>Kerakli harorat <span class="unit">(°C)</span></label>
+        <input type="number" id="t2" value="26">
+      </div>
+    </div>
+    <div class="field-grid" style="margin-top:10px;">
+      <div class="field">
+        <label>Suvni isitish vaqti <span class="unit">(soat)</span></label>
+        <input type="number" id="hours" value="72" min="1">
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Natija</div>
+  <div class="card" id="box-result"></div>
+
+  <div class="note">
+    Basseyn hajmi va sirt yuzasi oʻlchamlardan avtomatik hisoblanadi. Isitish uchun kerakli quvvat ikki qismdan iboradi: suvni belgilangan vaqt ichida qizdirish uchun quvvat + sirtdan bugʻlanish orqali yoʻqoladigan doimiy issiqlik. Issiqlik almashtirgich shu ikkisi yigʻindisidan katta yoki teng quvvatda tanlanadi.
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const ids = ['L','W','Dep','t1','t2','hours'];
+  const inputs = {}; ids.forEach(function(id){ inputs[id]=document.getElementById(id); });
+  const locationSel = document.getElementById('location');
+  const boxResult = document.getElementById('box-result');
+
+  function num(id){ const v=parseFloat(inputs[id].value); return isNaN(v)?0:v; }
+  function fmt(v,d){ if(v===null||v===undefined||isNaN(v)) return '—'; d=d===undefined?2:d; return v.toFixed(d); }
+  function row(container,k,v,unit,hi){
+    const r=document.createElement('div'); r.className='result-row'+(hi?' highlight':'');
+    r.innerHTML='<span class="k">'+k+'</span><span class="v">'+v+(unit?'<span class="unit">'+unit+'</span>':'')+'</span>';
+    container.appendChild(r);
+  }
+
+  function recalc(){
+    const L=num('L'), W=num('W'), Dep=num('Dep'), t1=num('t1'), t2=num('t2'), hours=num('hours');
+    const lossCoef = parseFloat(locationSel.value);
+
+    const volumeL = L*W*Dep*1000;
+    const areaM2 = L*W;
+    const dT = t2-t1;
+
+    boxResult.innerHTML = '';
+    if(hours<=0){
+      row(boxResult, 'Natija', 'Isitish vaqtini kiriting', '');
+      return;
+    }
+
+    const Q_heat_kW = dT>0 ? (volumeL*dT*1.163/1000)/hours : 0;
+    const Q_loss_kW = areaM2*lossCoef/1000;
+    const Q_total = Q_heat_kW + Q_loss_kW;
+
+    row(boxResult, 'Basseyn hajmi', fmt(volumeL,0), 'litr');
+    row(boxResult, 'Basseyn sirt yuzasi', fmt(areaM2,1), 'm²');
+    row(boxResult, 'Isitish uchun kerakli quvvat', fmt(Q_heat_kW,2), 'kVt');
+    row(boxResult, 'Sirtdan yoʻqoladigan quvvat', fmt(Q_loss_kW,2), 'kVt');
+    row(boxResult, 'Issiqlik almashtirgich uchun kerakli quvvat', fmt(Q_total,2), 'kVt', true);
+  }
+
+  ids.forEach(function(id){ inputs[id].addEventListener('input', recalc); });
+  locationSel.addEventListener('change', recalc);
+  recalc();
+})();
+</script>
+</body>
+</html>
