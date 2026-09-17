@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Avtopoliv — Liniya hisobi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0F1A; --surface:#101828; --surface-2:#141F33; --border:#223049; --border-soft:#1A2740;
+    --text:#E8EDF7; --text-muted:#8394AD; --text-faint:#54637E;
+    --accent:#3B9EFF; --accent-soft:rgba(59,158,255,0.12); --accent-strong:#63B3FF;
+    --water:#1FBEB6; --water-soft:rgba(31,190,182,0.12);
+    --amber:#F2A340; --amber-soft:rgba(242,163,64,0.12);
+    --danger:#F2555A; --danger-soft:rgba(242,85,90,0.12);
+    --computed-bg:#0D1626; --radius:10px;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#F3F6FB; --surface:#FFFFFF; --surface-2:#F7FAFD; --border:#D8E1EE; --border-soft:#E4EAF3;
+      --text:#101828; --text-muted:#5B6B85; --text-faint:#8C99B0;
+      --accent:#1E7FE0; --accent-soft:rgba(30,127,224,0.08); --accent-strong:#1667B8;
+      --water:#0E9C94; --water-soft:rgba(14,156,148,0.08);
+      --amber:#B36A0C; --amber-soft:rgba(179,106,12,0.08);
+      --danger:#C5333A; --danger-soft:rgba(197,51,58,0.08);
+      --computed-bg:#EEF2F8;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A0F1A; --surface:#101828; --surface-2:#141F33; --border:#223049; --border-soft:#1A2740;
+    --text:#E8EDF7; --text-muted:#8394AD; --text-faint:#54637E;
+    --accent:#3B9EFF; --accent-soft:rgba(59,158,255,0.12); --accent-strong:#63B3FF;
+    --water:#1FBEB6; --water-soft:rgba(31,190,182,0.12);
+    --amber:#F2A340; --amber-soft:rgba(242,163,64,0.12);
+    --danger:#F2555A; --danger-soft:rgba(242,85,90,0.12);
+    --computed-bg:#0D1626;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:36px;
+  }
+  .app{max-width:760px;margin:0 auto;padding:14px 12px 0;}
+
+  .topbar{display:flex; align-items:center; gap:10px; padding:6px 2px 14px;}
+  .topbar .icon-back{
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--surface); color:var(--text-muted); flex-shrink:0; font-size:16px;
+  }
+  .topbar .title{font-size:16px; font-weight:600;}
+  .topbar .subtitle{font-size:12px; color:var(--text-muted); margin-top:1px;}
+
+  .section-label{
+    font-size:11.5px; font-weight:700; color:var(--water);
+    letter-spacing:0.02em; margin:18px 2px 8px; display:flex; align-items:center; justify-content:space-between;
+  }
+
+  .linya-card{
+    background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius);
+    margin-bottom:12px; overflow:hidden;
+  }
+  .linya-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:11px 12px; background:var(--surface-2); border-bottom:1px solid var(--border-soft);
+  }
+  .linya-head input.linya-name{
+    background:none; border:none; color:var(--text); font-size:13.5px; font-weight:600;
+    font-family:'Inter'; padding:0; width:60%;
+  }
+  .linya-head input.linya-name:focus{outline:none;}
+  .linya-actions{display:flex; gap:6px;}
+  .icon-btn{
+    width:26px;height:26px; border-radius:6px; border:1px solid var(--border);
+    background:var(--bg); color:var(--text-muted); font-size:14px; line-height:1;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .icon-btn.danger{color:var(--danger); border-color:var(--danger);}
+
+  .table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  table.kallak{border-collapse:collapse; width:100%; min-width:520px;}
+  table.kallak thead th{
+    position:sticky; top:0; background:var(--surface-2); color:var(--text-muted);
+    font-size:10.5px; font-weight:600; text-align:left; padding:8px 6px;
+    border-bottom:1px solid var(--border); white-space:nowrap;
+  }
+  table.kallak thead th:first-child{min-width:70px;}
+  table.kallak tbody td{padding:5px 6px; border-bottom:1px solid var(--border-soft);}
+  table.kallak tbody tr:nth-child(even) td{background:var(--surface-2);}
+  table.kallak td.klabel{font-size:12px; font-weight:600; color:var(--text-muted); white-space:nowrap;}
+  table.kallak td input, table.kallak td select{
+    width:100%; background:var(--bg); border:1px solid var(--border); border-radius:6px;
+    color:var(--text); font-family:'JetBrains Mono',monospace; font-size:12.5px; padding:6px 7px;
+  }
+  table.kallak td input:focus, table.kallak td select:focus{outline:none; border-color:var(--accent); background:var(--accent-soft);}
+  table.kallak td.computed{
+    color:var(--text-faint); font-family:'JetBrains Mono',monospace; font-size:11.5px; text-align:right; white-space:nowrap;
+  }
+  table.kallak td.rm{text-align:center;}
+  table.kallak td.rm button{
+    background:none; border:none; color:var(--text-faint); font-size:15px; cursor:pointer; padding:2px 6px;
+  }
+
+  .linya-foot{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:9px 12px; background:var(--surface-2); border-top:1px solid var(--border-soft);
+  }
+  .add-kallak{
+    background:none; border:1px dashed var(--water); color:var(--water);
+    font-size:12px; font-weight:500; padding:6px 11px; border-radius:7px; cursor:pointer;
+  }
+  .linya-total{font-size:12px; color:var(--text-muted); text-align:right;}
+  .linya-total b{color:var(--accent-strong); font-family:'JetBrains Mono',monospace; font-weight:700;}
+
+  .add-linya{
+    width:100%; background:var(--accent-soft); border:1px dashed var(--accent);
+    color:var(--accent-strong); font-size:13px; font-weight:600; padding:12px; border-radius:var(--radius);
+    cursor:pointer; margin-bottom:16px;
+  }
+
+  .card{
+    background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius);
+    padding:12px; margin-bottom:10px;
+  }
+  .result-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:8px 0; border-bottom:1px solid var(--border-soft); gap:10px;
+  }
+  .result-row:last-child{border-bottom:none;}
+  .result-row .k{font-size:12.5px; color:var(--text-muted); line-height:1.35;}
+  .result-row .v{
+    font-family:'JetBrains Mono',monospace; font-size:14.5px; font-weight:700; color:var(--text);
+    white-space:nowrap; text-align:right;
+  }
+  .result-row .v .unit{font-size:11px; color:var(--text-faint); font-weight:400; margin-left:3px;}
+  .result-row.highlight .v{color:var(--accent-strong); font-size:16px;}
+
+  .worst-line-tag{
+    display:inline-block; font-size:10.5px; font-weight:600; padding:2px 8px; border-radius:999px;
+    background:var(--amber-soft); color:var(--amber); margin-top:8px;
+  }
+
+  .norms-card{
+    background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius); padding:12px;
+  }
+  .norms-table{width:100%; border-collapse:collapse; margin-bottom:10px;}
+  .norms-table td{padding:6px 4px; font-size:12px; border-bottom:1px solid var(--border-soft);}
+  .norms-table td:first-child{color:var(--text-muted);}
+  .norms-table td:last-child{text-align:right; font-family:'JetBrains Mono',monospace; font-weight:600; color:var(--water); white-space:nowrap;}
+  .norms-note{font-size:12px; color:var(--text-muted); line-height:1.55;}
+  .norms-note b{color:var(--text);}
+
+  .note{font-size:11.5px; color:var(--text-faint); padding:14px 4px 0; line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="icon-back">←</div>
+    <div>
+      <div class="title">Avtopoliv — Liniya hisobi</div>
+      <div class="subtitle">Teplopateriya boʻlimi</div>
+    </div>
+  </div>
+
+  <div class="section-label">Liniyalar va kallaklar</div>
+  <div id="linyalar"></div>
+  <button class="add-linya" id="add-linya">+ Liniya qoʻshish</button>
+
+  <div class="section-label">Umumiy natija</div>
+  <div class="card" id="box-total"></div>
+
+  <div class="section-label">Sugʻorish meʼyorlari</div>
+  <div class="norms-card">
+    <table class="norms-table">
+      <tr><td>20–25°C havo harorati</td><td>3–4 l/m² / kun</td></tr>
+      <tr><td>26–30°C havo harorati</td><td>5–6 l/m² / kun</td></tr>
+      <tr><td>31–35°C havo harorati</td><td>6–8 l/m² / kun</td></tr>
+      <tr><td>35°C dan yuqori</td><td>8–10 l/m² / kun</td></tr>
+    </table>
+    <div class="norms-note">
+      Tavsiya etilgan sugʻorish vaqti: <b>ertalab soat 06:00–08:00</b> yoki <b>kechqurun 19:00–21:00</b>. Kunning issiq va quyoshli paytida (11:00–17:00) sugʻorish tavsiya etilmaydi — bargda kuyish va bugʻlanishdan isrof yuzaga keladi.
+    </div>
+  </div>
+
+  <div class="note">
+    Har bir kallak qatoridagi "Quvur uzunligi" — nasosdan (yoki avvalgi kallakdan) shu kallakgacha boʻlgan masofa. Qarshilik PPRC PN20 quvur nomogrammasiga mos formula (Darsi–Veysbax) asosida avtomatik hisoblanadi — hech qanday grafikka qarash shart emas. Nasos tanlashda eng katta qarshilikka ega liniya asos qilib olinadi, chunki zonalar navbat bilan ishlaydi.
+  </div>
+
+</div>
+
+<script>
+(function(){
+  // Nominal PPRC PN20 diametr (tashqi mm) -> devor qalinligi (mm)
+  const PIPE_TABLE = [
+    {d:16, wall:2.7}, {d:20, wall:3.4}, {d:25, wall:4.2}, {d:32, wall:5.4},
+    {d:40, wall:6.7}, {d:50, wall:8.4}, {d:63, wall:10.5}, {d:75, wall:12.5}, {d:90, wall:15}
+  ];
+  function internalD(nominal){
+    const p = PIPE_TABLE.find(function(x){ return x.d === nominal; });
+    return p ? (p.d - 2*p.wall) / 1000 : 0; // metrda
+  }
+
+  let linyaSeq = 1;
+  let kallakSeq = 1;
+  let linyalar = [];
+
+  function newRow(len){
+    return { id: kallakSeq++, flow: 0, d: 25, len: len };
+  }
+  function newLinya(){
+    const l = { id: linyaSeq++, name: null, rows: [newRow(45), newRow(12)] };
+    return l;
+  }
+
+  function loadSaved(){
+    try{
+      const raw = localStorage.getItem('avtopoliv_liniya_state');
+      if(raw){
+        const s = JSON.parse(raw);
+        if(s.linyalar && s.linyalar.length){
+          linyalar = s.linyalar;
+          linyaSeq = s.linyaSeq || linyaSeq;
+          kallakSeq = s.kallakSeq || kallakSeq;
+          return;
+        }
+      }
+    }catch(e){ /* ignore */ }
+    linyalar = [newLinya()];
+  }
+  function saveState(){
+    try{
+      localStorage.setItem('avtopoliv_liniya_state', JSON.stringify({linyalar, linyaSeq, kallakSeq}));
+    }catch(e){ /* ignore */ }
+  }
+
+  function fmt(v, d){
+    if(v === null || v === undefined || isNaN(v)) return '—';
+    d = d === undefined ? 2 : d;
+    return v.toFixed(d);
+  }
+
+  // Darsi-Veysbax + Blazius/laminar taxribiy ishqalanish koeffitsienti
+  function frictionPerMeter(Q_m3s, D_m){
+    if(Q_m3s <= 0 || D_m <= 0) return {v:0, loss_mm:0};
+    const area = Math.PI * D_m * D_m / 4;
+    const v = Q_m3s / area;
+    const nu = 1.004e-6;
+    const Re = v * D_m / nu;
+    let lambda;
+    if(Re <= 0) lambda = 0;
+    else if(Re < 2300) lambda = 64 / Re;
+    else lambda = 0.3164 / Math.pow(Re, 0.25);
+    const loss_m = lambda * v * v / (2 * 9.81 * D_m);
+    return {v: v, loss_mm: loss_m * 1000};
+  }
+
+  function computeLinya(linya){
+    const n = linya.rows.length;
+    const cum = new Array(n).fill(0);
+    for(let i = n - 1; i >= 0; i--){
+      cum[i] = (i === n - 1 ? 0 : cum[i+1]) + (parseFloat(linya.rows[i].flow) || 0);
+    }
+    let totalMm = 0;
+    const details = linya.rows.map(function(row, i){
+      const flow_lh = cum[i];
+      const Q_m3s = flow_lh / 1000 / 3600;
+      const D_m = internalD(parseInt(row.d, 10));
+      const fr = frictionPerMeter(Q_m3s, D_m);
+      const len = parseFloat(row.len) || 0;
+      const segLoss = fr.loss_mm * len;
+      totalMm += segLoss;
+      return {flow_lh: flow_lh, v: fr.v, loss_per_m: fr.loss_mm, segLoss: segLoss};
+    });
+    const firstFlow = n > 0 ? cum[0] : 0;
+    return {totalMm: totalMm, details: details, pumpFlow_lh: firstFlow};
+  }
+
+  function render(){
+    const wrap = document.getElementById('linyalar');
+    wrap.innerHTML = '';
+
+    let worstIdx = -1, worstVal = -1;
+    const computedAll = linyalar.map(function(l){ return computeLinya(l); });
+    computedAll.forEach(function(c, i){ if(c.totalMm > worstVal){ worstVal = c.totalMm; worstIdx = i; } });
+
+    linyalar.forEach(function(linya, li){
+      const comp = computedAll[li];
+      const card = document.createElement('div');
+      card.className = 'linya-card';
+
+      const head = document.createElement('div');
+      head.className = 'linya-head';
+      const nameInput = document.createElement('input');
+      nameInput.className = 'linya-name';
+      nameInput.value = linya.name || ('Liniya ' + linya.id);
+      nameInput.oninput = function(){ linya.name = nameInput.value; saveState(); };
+      const actions = document.createElement('div');
+      actions.className = 'linya-actions';
+      const rmLinyaBtn = document.createElement('div');
+      rmLinyaBtn.className = 'icon-btn danger';
+      rmLinyaBtn.textContent = '✕';
+      rmLinyaBtn.onclick = function(){
+        if(linyalar.length <= 1) return;
+        linyalar = linyalar.filter(function(x){ return x.id !== linya.id; });
+        saveState(); render();
+      };
+      actions.appendChild(rmLinyaBtn);
+      head.appendChild(nameInput);
+      head.appendChild(actions);
+      card.appendChild(head);
+
+      const scroll = document.createElement('div');
+      scroll.className = 'table-scroll';
+      const table = document.createElement('table');
+      table.className = 'kallak';
+      table.innerHTML =
+        '<thead><tr>' +
+        '<th>Kallak</th><th>L/soat (l/h)</th><th>Quvur D (mm)</th><th>Quvur uzunligi (m)</th>' +
+        '<th>Sarf (segment)</th><th>Tezlik</th><th>Yoʻqotish/m</th><th></th>' +
+        '</tr></thead>';
+      const tbody = document.createElement('tbody');
+
+      linya.rows.forEach(function(row, ri){
+        const tr = document.createElement('tr');
+
+        const tdLabel = document.createElement('td');
+        tdLabel.className = 'klabel';
+        tdLabel.textContent = 'Kallak ' + (ri + 1);
+        tr.appendChild(tdLabel);
+
+        const tdFlow = document.createElement('td');
+        const flowInput = document.createElement('input');
+        flowInput.type = 'number'; flowInput.inputMode = 'decimal'; flowInput.min = '0';
+        flowInput.value = row.flow;
+        flowInput.oninput = function(){ row.flow = parseFloat(flowInput.value) || 0; saveState(); render(); };
+        tdFlow.appendChild(flowInput);
+        tr.appendChild(tdFlow);
+
+        const tdD = document.createElement('td');
+        const dSelect = document.createElement('select');
+        PIPE_TABLE.forEach(function(p){
+          const opt = document.createElement('option');
+          opt.value = p.d; opt.textContent = p.d + ' (' + p.d + 'x' + p.wall + ')';
+          if(parseInt(row.d,10) === p.d) opt.selected = true;
+          dSelect.appendChild(opt);
+        });
+        dSelect.onchange = function(){ row.d = parseInt(dSelect.value, 10); saveState(); render(); };
+        tdD.appendChild(dSelect);
+        tr.appendChild(tdD);
+
+        const tdLen = document.createElement('td');
+        const lenInput = document.createElement('input');
+        lenInput.type = 'number'; lenInput.inputMode = 'decimal'; lenInput.min = '0';
+        lenInput.value = row.len;
+        lenInput.oninput = function(){ row.len = parseFloat(lenInput.value) || 0; saveState(); render(); };
+        tdLen.appendChild(lenInput);
+        tr.appendChild(tdLen);
+
+        const d = comp.details[ri];
+        const tdSeg = document.createElement('td'); tdSeg.className = 'computed';
+        tdSeg.textContent = fmt(d.flow_lh,1) + ' l/h';
+        tr.appendChild(tdSeg);
+
+        const tdV = document.createElement('td'); tdV.className = 'computed';
+        tdV.textContent = fmt(d.v,2) + ' m/s';
+        tr.appendChild(tdV);
+
+        const tdLoss = document.createElement('td'); tdLoss.className = 'computed';
+        tdLoss.textContent = fmt(d.loss_per_m,1) + ' mm/m';
+        tr.appendChild(tdLoss);
+
+        const tdRm = document.createElement('td'); tdRm.className = 'rm';
+        const rmBtn = document.createElement('button');
+        rmBtn.textContent = '✕';
+        rmBtn.onclick = function(){
+          if(linya.rows.length <= 1) return;
+          linya.rows = linya.rows.filter(function(x){ return x.id !== row.id; });
+          saveState(); render();
+        };
+        tdRm.appendChild(rmBtn);
+        tr.appendChild(tdRm);
+
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      scroll.appendChild(table);
+      card.appendChild(scroll);
+
+      const foot = document.createElement('div');
+      foot.className = 'linya-foot';
+      const addKallakBtn = document.createElement('button');
+      addKallakBtn.className = 'add-kallak';
+      addKallakBtn.textContent = '+ Kallak';
+      addKallakBtn.onclick = function(){
+        linya.rows.push(newRow(12));
+        saveState(); render();
+      };
+      const totalSpan = document.createElement('div');
+      totalSpan.className = 'linya-total';
+      totalSpan.innerHTML = 'Qarshilik: <b>' + fmt(comp.totalMm,0) + ' mm</b>' + (li === worstIdx && linyalar.length > 1 ? ' <span style="color:var(--amber);">★</span>' : '');
+      foot.appendChild(addKallakBtn);
+      foot.appendChild(totalSpan);
+      card.appendChild(foot);
+
+      wrap.appendChild(card);
+    });
+
+    // Umumiy natija
+    const worst = computedAll[worstIdx] || {totalMm:0, pumpFlow_lh:0};
+    const totalMm = worst.totalMm;
+    const totalBar = totalMm * 0.0000980665;
+    const totalKpa = totalMm * 0.00980665;
+    const pumpFlow_m3h = worst.pumpFlow_lh / 1000;
+
+    const boxTotal = document.getElementById('box-total');
+    boxTotal.innerHTML = '';
+    const r1 = document.createElement('div'); r1.className='result-row';
+    r1.innerHTML = '<span class="k">Umumiy qarshilik</span><span class="v">'+fmt(totalMm,0)+'<span class="unit">mm</span></span>';
+    boxTotal.appendChild(r1);
+    const r2 = document.createElement('div'); r2.className='result-row';
+    r2.innerHTML = '<span class="k">Umumiy qarshilik</span><span class="v">'+fmt(totalBar,3)+'<span class="unit">bar</span></span>';
+    boxTotal.appendChild(r2);
+    const r3 = document.createElement('div'); r3.className='result-row highlight';
+    r3.innerHTML = '<span class="k">Umumiy qarshilik</span><span class="v">'+fmt(totalKpa,1)+'<span class="unit">kPa</span></span>';
+    boxTotal.appendChild(r3);
+    const r4 = document.createElement('div'); r4.className='result-row';
+    r4.innerHTML = '<span class="k">Nasos uchun kerakli sarf</span><span class="v">'+fmt(pumpFlow_m3h,3)+'<span class="unit">m³/soat</span></span>';
+    boxTotal.appendChild(r4);
+
+    if(linyalar.length > 1){
+      const tag = document.createElement('div');
+      tag.className = 'worst-line-tag';
+      tag.textContent = '★ ' + (linyalar[worstIdx].name || ('Liniya ' + linyalar[worstIdx].id)) + ' — eng yuqori qarshilik (nasos shunga qarab tanlanadi)';
+      boxTotal.appendChild(tag);
+    }
+  }
+
+  document.getElementById('add-linya').onclick = function(){
+    linyalar.push(newLinya());
+    saveState(); render();
+  };
+
+  loadSaved();
+  render();
+})();
+</script>
+</body>
+</html>
