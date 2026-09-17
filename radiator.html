@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Radiator hisob-kitoblari</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0F1A; --surface:#101828; --surface-2:#141F33; --border:#223049; --border-soft:#1A2740;
+    --text:#E8EDF7; --text-muted:#8394AD; --text-faint:#54637E;
+    --accent:#F2555A; --accent-soft:rgba(242,85,90,0.12); --accent-strong:#FF7A7E;
+    --water:#3B9EFF; --water-soft:rgba(59,158,255,0.12);
+    --amber:#F2A340; --amber-soft:rgba(242,163,64,0.12);
+    --computed-bg:#0D1626; --radius:10px;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#F3F6FB; --surface:#FFFFFF; --surface-2:#F7FAFD; --border:#D8E1EE; --border-soft:#E4EAF3;
+      --text:#101828; --text-muted:#5B6B85; --text-faint:#8C99B0;
+      --accent:#C5333A; --accent-soft:rgba(197,51,58,0.08); --accent-strong:#9C2229;
+      --water:#1E7FE0; --water-soft:rgba(30,127,224,0.08);
+      --amber:#B36A0C; --amber-soft:rgba(179,106,12,0.08);
+      --computed-bg:#EEF2F8;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A0F1A; --surface:#101828; --surface-2:#141F33; --border:#223049; --border-soft:#1A2740;
+    --text:#E8EDF7; --text-muted:#8394AD; --text-faint:#54637E;
+    --accent:#F2555A; --accent-soft:rgba(242,85,90,0.12); --accent-strong:#FF7A7E;
+    --water:#3B9EFF; --water-soft:rgba(59,158,255,0.12);
+    --amber:#F2A340; --amber-soft:rgba(242,163,64,0.12);
+    --computed-bg:#0D1626;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:36px;
+  }
+  .app{max-width:760px;margin:0 auto;padding:14px 12px 0;}
+
+  .topbar{display:flex; align-items:center; gap:10px; padding:6px 2px 14px;}
+  .topbar .icon-back{
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--surface); color:var(--text-muted); flex-shrink:0; font-size:16px;
+  }
+  .topbar .title{font-size:16px; font-weight:600;}
+  .topbar .subtitle{font-size:12px; color:var(--text-muted); margin-top:1px;}
+
+  .section-label{
+    font-size:11.5px; font-weight:700; color:var(--accent);
+    letter-spacing:0.02em; margin:18px 2px 8px;
+  }
+  .section-label:first-of-type{margin-top:4px;}
+
+  .card{
+    background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius);
+    padding:12px; margin-bottom:10px;
+  }
+
+  .field-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .field{display:flex; flex-direction:column; gap:5px;}
+  .field.full{grid-column:1 / -1;}
+  .field label{font-size:11px; color:var(--text-muted); font-weight:500; line-height:1.3;}
+  .field .unit{color:var(--text-faint); font-weight:400;}
+  .field input, .field select{
+    background:var(--bg); border:1px solid var(--border); border-radius:7px; color:var(--text);
+    font-family:'JetBrains Mono',monospace; font-size:13.5px; padding:9px 10px; width:100%;
+  }
+  .field select{font-family:'Inter'; font-size:13px;}
+  .field input:focus, .field select:focus{outline:none; border-color:var(--accent); background:var(--accent-soft);}
+
+  .mode-toggle{display:flex; gap:8px; margin-bottom:10px;}
+  .mode-btn{
+    flex:1; text-align:center; padding:9px; border-radius:8px; font-size:12.5px; font-weight:600;
+    border:1px solid var(--border-soft); background:var(--surface-2); color:var(--text-muted); cursor:pointer;
+    -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select:none;
+  }
+  .mode-btn.active{background:var(--accent-soft); border-color:var(--accent); color:var(--accent-strong);}
+
+  .result-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:9px 0; border-bottom:1px solid var(--border-soft); gap:10px;
+  }
+  .result-row:last-child{border-bottom:none;}
+  .result-row .k{font-size:12.5px; color:var(--text-muted); line-height:1.35;}
+  .result-row .v{
+    font-family:'JetBrains Mono',monospace; font-size:14.5px; font-weight:700; color:var(--text);
+    white-space:nowrap; text-align:right;
+  }
+  .result-row .v .unit{font-size:11px; color:var(--text-faint); font-weight:400; margin-left:3px;}
+  .result-row.highlight .v{color:var(--accent-strong); font-size:18px;}
+
+  table.catalog{width:100%; border-collapse:collapse;}
+  table.catalog thead th{
+    text-align:left; font-size:10.5px; font-weight:600; color:var(--text-muted);
+    padding:7px 6px; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--surface);
+  }
+  table.catalog thead th:last-child{text-align:right;}
+  table.catalog tbody td{
+    padding:7px 6px; font-size:12px; border-bottom:1px solid var(--border-soft); color:var(--text);
+  }
+  table.catalog tbody tr:nth-child(even) td{background:var(--surface-2);}
+  table.catalog tbody td:last-child{
+    text-align:right; font-family:'JetBrains Mono',monospace; font-weight:600; color:var(--water); white-space:nowrap;
+  }
+  .catalog-scroll{max-height:340px; overflow-y:auto; border-radius:8px;}
+  .catalog-sub{font-size:11.5px; font-weight:600; color:var(--text-muted); margin:10px 2px 6px;}
+
+  .note{font-size:11.5px; color:var(--text-faint); padding:14px 4px 0; line-height:1.5;}
+  .warn{
+    background:var(--amber-soft); color:var(--amber); font-size:11.5px; font-weight:500;
+    border-radius:8px; padding:9px 10px; margin-top:8px; line-height:1.45;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="icon-back">←</div>
+    <div>
+      <div class="title">Radiator hisob-kitoblari</div>
+      <div class="subtitle">Teplopateriya boʻlimi</div>
+    </div>
+  </div>
+
+  <div class="section-label">Issiqlik tizimi parametrlari</div>
+  <div class="card">
+    <div class="field-grid">
+      <div class="field">
+        <label>Podacha (bosh quvur) harorati <span class="unit">(°C)</span></label>
+        <input type="number" id="t_pod" value="75">
+      </div>
+      <div class="field">
+        <label>Obratka (qaytish) harorati <span class="unit">(°C)</span></label>
+        <input type="number" id="t_obr" value="55">
+      </div>
+    </div>
+    <div class="field-grid" style="margin-top:10px;">
+      <div class="field">
+        <label>Xona harorati <span class="unit">(°C)</span></label>
+        <input type="number" id="t_room" value="22">
+      </div>
+      <div class="field">
+        <label>Xona issiqlik yoʻqotilishi <span class="unit">(Vt)</span></label>
+        <input type="number" id="q_loss" value="1558">
+      </div>
+    </div>
+    <div class="field-grid" style="margin-top:10px;">
+      <div class="field">
+        <label>Ulanish turi</label>
+        <select id="conn_type"></select>
+      </div>
+      <div class="field">
+        <label>Oʻrnatish turi</label>
+        <select id="install_type"></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Radiator tanlash</div>
+  <div class="card">
+    <div class="mode-toggle">
+      <div class="mode-btn active" id="mode-sectional">Seksiyali</div>
+      <div class="mode-btn" id="mode-panel">Panelli</div>
+    </div>
+
+    <div id="sectional-fields">
+      <div class="field-grid">
+        <div class="field">
+          <label>Radiator guruhi</label>
+          <select id="sect_group">
+            <option value="alu">Alyuminli seksiyali</option>
+            <option value="bim">Bimetall seksiyali</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Model</label>
+          <select id="sect_model"></select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Kerakli razmer (avtomatik tavsiya)</div>
+  <div class="card" id="box-recommend"></div>
+
+  <div class="section-label">Natija</div>
+  <div class="card" id="box-result"></div>
+
+  <div class="note">
+    ΔT (harorat napori) = (Podacha + Obratka)/2 − Xona harorati boʻyicha, radiatorning haqiqiy quvvati esa Qx = Q_nom × (ΔT/70)^1.3 × Ulanish koeffitsienti × Oʻrnatish koeffitsienti × Seksiyalar soni koeffitsienti formulasi bilan avtomatik hisoblanadi.
+  </div>
+
+</div>
+
+<script>
+window.addEventListener('error', function(e){
+  console.error('Radiator calc error:', e.message, 'at', e.filename+':'+e.lineno);
+});
+(function(){
+  const CONN = [
+    ['Diagonal, Yuqoridan-Pastga',1],
+    ['Diagonal, Pastdan-Pastga',0.88],
+    ['Diagonal, Pastdan-Yuqoriga',0.8],
+    ['Yondan, Yuqoridan-Pastga',0.97],
+    ['Yondan, Pastdan-Pastga',0.78],
+    ['Yondan, Pastdan-Yuqoriga',0.78],
+    ['Pastdan-oʻngdan',0.8],
+    ['Pastdan-chapdan',0.8]
+  ];
+  const INSTALL = [
+    ['Nishasiz, ochiq devorda',1],
+    ['Nishasiz, vertikal toʻsiq A=80mm',0.9],
+    ['Nishasiz, tokcha taxtasi B=40mm',1.05],
+    ['Nishasiz, tokcha taxtasi B=80mm',1.03],
+    ['Nishasiz, tokcha taxtasi B=100mm',1.02],
+    ['Nishasiz, gʻovakli shkaf B=250mm',1.12],
+    ['Nishasiz, gʻovakli shkaf B=200mm',1.2],
+    ['Nishasiz, gʻovakli shkaf B=150mm',1.25],
+    ['Nishasiz, gʻovakli shkaf oldi yopiq B=120mm',1.3],
+    ['Nishada devor ichida B=40mm',1.11],
+    ['Nishada devor ichida B=80mm',1.08],
+    ['Nishada devor ichida B=100mm',1.06]
+  ];
+
+  const ALU = [
+    ['Revollution 500',170],['Revollution 350',128],['Indigo 500',188],
+    ['Biliner 500 Bianco traffico',175],['Biliner 500 Silver Satin',168],
+    ['Heatliner 500',175],['Monoblock A',170],['Monoblock A 100',182],
+    ['Monoblock B',161],['Monoblock B 100',175],['Monoblock B 350',116]
+  ];
+  const BIM = [
+    ['Biliner 500',165],['Biliner 350',112.5],['Revollution Bimetall 500',160],
+    ['Revollution Bimetall 350',122],['Vittoria supper 500',175],['Vittoria 350',118],
+    ['Indigo supper 500',175],['Pianoforte 500 Bianco traffico / Noir sable',189],
+    ['Pianoforte 500 Silver satin',180],['Pianoforte 300 Bianco traffico / Noir sable',123],
+    ['Pianoforte 300 Silver satin',116],['Pianoforte 200 Bianco traffico / Noir sable',107],
+    ['Pianoforte 200 Silver satin',101],['Pianoforte Tower B/N 18sek',1610],
+    ['Pianoforte Tower Silver satin 18sek',1530],['Pianoforte Tower Silver satin 22sek',1870],
+    ['Pianoforte Tower B/N 22sek',1968],['Monoblock A',170],['Monoblock A 100',182],
+    ['Monoblock B',161],['Monoblock B 100',175],['Monoblock B 350',116]
+  ];
+
+  // Panel seriyalar: {heights:[...], rows: [length, q@h1, q@h2, ...]}
+  const PANELS = {
+    'Royal Thermo COMPACT — TIP 22': { heights:[300,400,500,600], rows:[
+      [400,559,728,882,1028],[600,838,1092,1323,1543],[800,1118,1456,1764,2057],
+      [1000,1397,1820,2205,2571],[1200,1676,2184,2646,3085],[1400,1956,2548,3087,3599],
+      [1600,2235,2912,3528,4114],[1800,2515,3276,3969,4628],[2000,2794,3640,4410,5142],
+      [2200,3073,4004,4851,5656],[2400,3353,4368,5292,6170],[2600,3632,4732,5733,6685],
+      [2800,3912,4085,6174,7199],[3000,4191,5460,6615,7713]
+    ]},
+    'LIDER — TIP 22': { heights:[300,400,500,600], rows:[
+      [400,545,695,839,974],[600,817,1042,1259,1462],[800,1090,1390,1678,1949],
+      [1000,1362,1738,2098,2436],[1200,1634,2086,2518,2923],[1400,1907,2433,2937,3410],
+      [1600,2179,2781,3357,3898],[1800,2452,3120,3776,4385],[2000,2724,3476,4196,4872]
+    ]},
+    'Royal Thermo COMPACT — TIP 33': { heights:[300,500,600], rows:[
+      [400,674,1014,1152],[600,1011,1521,1728],[800,1340,2027,2304],
+      [1000,1685,2534,280],[1200,2023,3041,3456],[1400,2360,3548,4032],
+      [1600,2697,4055,4609],[1800,3034,4562,5185],[2000,3371,5069,5761],
+      [2200,3708,5575,6337],[2400,4045,6082,6913],[2600,4382,6589,7489],
+      [2800,4719,7096,8065],[3000,5056,7603,8641]
+    ]},
+    'AKFA COMFORT — TIP 22': { heights:[300,400,500,600], rows:[
+      [400,840,763,872,1145],[600,840,1145,1308,1517],[800,1120,1526,1744,2023],
+      [1000,1400,1908,2180,2529],[1200,1680,2289,2616,3035],[1400,1960,2671,3052,3541],
+      [1600,2240,3053,3388,4046],[1800,2520,3434,3924,4552],[2000,2800,3816,4360,5058]
+    ]}
+  };
+
+  const AKFA = PANELS['AKFA COMFORT — TIP 22'];
+
+  // --- DOM references (barchasi funksiyalar chaqirilishidan OLDIN olinadi) ---
+  const connSel = document.getElementById('conn_type');
+  const installSel = document.getElementById('install_type');
+  const sectGroup = document.getElementById('sect_group');
+  const sectModel = document.getElementById('sect_model');
+  const modeSectBtn = document.getElementById('mode-sectional');
+  const modePanelBtn = document.getElementById('mode-panel');
+  const sectFields = document.getElementById('sectional-fields');
+  const boxResult = document.getElementById('box-result');
+  const boxRecommend = document.getElementById('box-recommend');
+
+  const ids = ['t_pod','t_obr','t_room','q_loss'];
+  const inputs = {}; ids.forEach(function(id){ inputs[id]=document.getElementById(id); });
+
+  let mode = 'sectional';
+
+  // --- Yordamchi funksiyalar ---
+  function fillSelect(sel, items){
+    sel.innerHTML = '';
+    items.forEach(function(it, i){
+      const opt = document.createElement('option');
+      opt.value = i; opt.textContent = it[0] + ' — ' + it[1] + ' Vt';
+      sel.appendChild(opt);
+    });
+  }
+  function fillSimpleSelect(sel, items){
+    sel.innerHTML = '';
+    items.forEach(function(it, i){
+      const opt = document.createElement('option');
+      opt.value = i; opt.textContent = it[0] + ' (×' + it[1] + ')';
+      sel.appendChild(opt);
+    });
+  }
+  function num(id){ const v=parseFloat(inputs[id].value); return isNaN(v)?0:v; }
+  function fmt(v,d){ if(v===null||v===undefined||isNaN(v)) return '—'; d=d===undefined?1:d; return v.toFixed(d); }
+  function row(container,k,v,unit,hi){
+    const r=document.createElement('div'); r.className='result-row'+(hi?' highlight':'');
+    r.innerHTML='<span class="k">'+k+'</span><span class="v">'+v+(unit?'<span class="unit">'+unit+'</span>':'')+'</span>';
+    container.appendChild(r);
+  }
+  function beta3(n){ if(n<=15) return 1; if(n<=20) return 0.98; if(n<=25) return 0.96; return 0.96; }
+
+  function refreshSectModel(){
+    fillSelect(sectModel, sectGroup.value === 'alu' ? ALU : BIM);
+    recalc();
+  }
+  function setMode(m){
+    mode = m;
+    if(m === 'sectional'){
+      modeSectBtn.classList.add('active'); modePanelBtn.classList.remove('active');
+      sectFields.style.display='block';
+    } else {
+      modePanelBtn.classList.add('active'); modeSectBtn.classList.remove('active');
+      sectFields.style.display='none';
+    }
+    recalc();
+  }
+
+  function recalc(){
+    const t_pod=num('t_pod'), t_obr=num('t_obr'), t_room=num('t_room'), q_loss=num('q_loss');
+    const dT = (t_pod+t_obr)/2 - t_room;
+    const beta2 = CONN[connSel.value][1];
+    const beta4 = INSTALL[installSel.value][1];
+
+    const box = boxResult;
+    box.innerHTML = '';
+    row(box, 'Harorat napori (ΔT)', fmt(dT,1), '°C');
+    boxRecommend.innerHTML = '';
+
+    if(dT <= 0){
+      row(box, 'Natija', 'ΔT musbat boʻlishi kerak', '');
+      return;
+    }
+
+    if(mode === 'sectional'){
+      const group = sectGroup.value === 'alu' ? ALU : BIM;
+      const model = group[sectModel.value];
+      const qNom = model[1];
+      // Q_actual: faqat ulanish va oʻrnatish koeffitsientlari bilan (beta3 hali qoʻshilmagan)
+      const qActual = qNom * Math.pow(dT/70, 1.3) * beta2 * beta4;
+      const nRaw = qActual > 0 ? q_loss / qActual : 0;
+      const b3 = beta3(nRaw);
+      const nExact = qActual > 0 ? q_loss / (qActual * b3) : 0;
+      const n = Math.ceil(nExact);
+      const qJami = n * qActual * b3;
+      const qZaxira = qJami - q_loss;
+
+      row(box, 'Bitta seksiya quvvati (nominal)', fmt(qNom,0), 'Vt');
+      row(box, 'Bitta seksiya quvvati (haqiqiy)', fmt(qActual,1), 'Vt');
+      row(box, 'Seksiyalar soni koeffitsienti (β3)', fmt(b3,2));
+      row(box, 'Kerakli seksiyalar soni', fmt(n,0)+' dona', '', true);
+      row(box, 'Umumiy oʻrnatilgan quvvat', fmt(qJami,0), 'Vt');
+      row(box, 'Zaxira', (qZaxira>=0?'+':'')+fmt(qZaxira,0), 'Vt');
+
+      boxRecommend.innerHTML = '<div class="result-row"><span class="k">Tanlangan model boʻyicha hisoblanadi (yuqoridagi tanlovga qarab)</span></div>';
+    } else {
+      // AKFA COMFORT katalogidan avtomatik eng mos razmerni topish
+      let best = null;
+      AKFA.rows.forEach(function(row2){
+        AKFA.heights.forEach(function(h, hi){
+          const qN = row2[1+hi];
+          const qA = qN * Math.pow(dT/70, 1.3) * beta2 * beta4;
+          if(qA <= 0) return;
+          const cnt = Math.ceil(q_loss / qA);
+          const surplus = cnt*qA - q_loss;
+          const area = row2[0]*h;
+          const cand = {length:row2[0], height:h, qA:qA, count:cnt, surplus:surplus, area:area};
+          if(!best) { best = cand; return; }
+          if(cand.count < best.count) { best = cand; return; }
+          if(cand.count === best.count && cand.surplus < best.surplus) { best = cand; return; }
+          if(cand.count === best.count && cand.surplus === best.surplus && cand.area < best.area) { best = cand; }
+        });
+      });
+      if(best){
+        row(boxRecommend, 'Tavsiya etilgan razmer', best.length+'×'+best.height, 'mm', true);
+        row(boxRecommend, 'Kerakli soni', fmt(best.count,0)+' dona', '');
+      }
+    }
+  }
+
+  // --- Voqea tinglovchilarini ulash ---
+  sectGroup.addEventListener('change', refreshSectModel);
+  sectModel.addEventListener('change', recalc);
+  modeSectBtn.addEventListener('click', function(){ setMode('sectional'); });
+  modeSectBtn.addEventListener('touchend', function(e){ e.preventDefault(); setMode('sectional'); });
+  modePanelBtn.addEventListener('click', function(){ setMode('panel'); });
+  modePanelBtn.addEventListener('touchend', function(e){ e.preventDefault(); setMode('panel'); });
+  ids.forEach(function(id){ inputs[id].addEventListener('input', recalc); });
+  connSel.addEventListener('change', recalc);
+  installSel.addEventListener('change', recalc);
+
+  // --- Boshlangʻich toʻldirish (endi barcha funksiya va oʻzgaruvchilar tayyor) ---
+  fillSimpleSelect(connSel, CONN);
+  fillSimpleSelect(installSel, INSTALL);
+  refreshSectModel();
+  recalc();
+})();
+</script>
+</body>
+</html>
