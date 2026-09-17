@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Gidrostrelka hisobi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0F1A; --surface:#101828; --surface-2:#141F33; --border:#223049; --border-soft:#1A2740;
+    --text:#E8EDF7; --text-muted:#8394AD; --text-faint:#54637E;
+    --accent:#8B7CF6; --accent-soft:rgba(139,124,246,0.12); --accent-strong:#A79BFF;
+    --water:#3B9EFF; --water-soft:rgba(59,158,255,0.12);
+    --computed-bg:#0D1626; --radius:10px;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#F3F6FB; --surface:#FFFFFF; --surface-2:#F7FAFD; --border:#D8E1EE; --border-soft:#E4EAF3;
+      --text:#101828; --text-muted:#5B6B85; --text-faint:#8C99B0;
+      --accent:#6449E0; --accent-soft:rgba(100,73,224,0.08); --accent-strong:#4E37BF;
+      --water:#1E7FE0; --water-soft:rgba(30,127,224,0.08);
+      --computed-bg:#EEF2F8;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A0F1A; --surface:#101828; --surface-2:#141F33; --border:#223049; --border-soft:#1A2740;
+    --text:#E8EDF7; --text-muted:#8394AD; --text-faint:#54637E;
+    --accent:#8B7CF6; --accent-soft:rgba(139,124,246,0.12); --accent-strong:#A79BFF;
+    --water:#3B9EFF; --water-soft:rgba(59,158,255,0.12);
+    --computed-bg:#0D1626;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:36px;
+  }
+  .app{max-width:720px;margin:0 auto;padding:14px 12px 0;}
+  .topbar{display:flex; align-items:center; gap:10px; padding:6px 2px 14px;}
+  .topbar .icon-back{
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--surface); color:var(--text-muted); flex-shrink:0; font-size:16px;
+  }
+  .topbar .title{font-size:16px; font-weight:600;}
+  .topbar .subtitle{font-size:12px; color:var(--text-muted); margin-top:1px;}
+  .section-label{
+    font-size:11.5px; font-weight:700; color:var(--accent);
+    letter-spacing:0.02em; margin:18px 2px 8px;
+  }
+  .section-label:first-of-type{margin-top:4px;}
+  .card{
+    background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius);
+    padding:12px; margin-bottom:10px;
+  }
+  .field-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .field{display:flex; flex-direction:column; gap:5px;}
+  .field label{font-size:11px; color:var(--text-muted); font-weight:500; line-height:1.3;}
+  .field .unit{color:var(--text-faint); font-weight:400;}
+  .field input{
+    background:var(--bg); border:1px solid var(--border); border-radius:7px; color:var(--text);
+    font-family:'JetBrains Mono',monospace; font-size:14px; padding:9px 10px; width:100%;
+  }
+  .field input:focus{outline:none; border-color:var(--accent); background:var(--accent-soft);}
+  .result-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:9px 0; border-bottom:1px solid var(--border-soft); gap:10px;
+  }
+  .result-row:last-child{border-bottom:none;}
+  .result-row .k{font-size:12.5px; color:var(--text-muted); line-height:1.35;}
+  .result-row .v{
+    font-family:'JetBrains Mono',monospace; font-size:14.5px; font-weight:700; color:var(--text);
+    white-space:nowrap; text-align:right;
+  }
+  .result-row .v .unit{font-size:11px; color:var(--text-faint); font-weight:400; margin-left:3px;}
+  .result-row.highlight .v{color:var(--accent-strong); font-size:17px;}
+  .note{font-size:11.5px; color:var(--text-faint); padding:14px 4px 0; line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="icon-back">←</div>
+    <div>
+      <div class="title">Gidrostrelka hisobi</div>
+      <div class="subtitle">Teplopateriya boʻlimi</div>
+    </div>
+  </div>
+
+  <div class="section-label">Kirish parametrlari</div>
+  <div class="card">
+    <div class="field-grid">
+      <div class="field">
+        <label>Kotyollar umumiy quvvati <span class="unit">(kVt)</span></label>
+        <input type="number" id="Q" value="24" min="0">
+      </div>
+      <div class="field">
+        <label>Podacha harorati <span class="unit">(°C)</span></label>
+        <input type="number" id="t_pod" value="75">
+      </div>
+    </div>
+    <div class="field-grid" style="margin-top:10px;">
+      <div class="field">
+        <label>Obratka harorati <span class="unit">(°C)</span></label>
+        <input type="number" id="t_obr" value="55">
+      </div>
+      <div class="field">
+        <label style="visibility:hidden;">—</label>
+        <input type="text" disabled id="dt-hint" style="color:var(--text-faint); font-family:'Inter'; font-size:11.5px;">
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Loyiha tezliklari (standart)</div>
+  <div class="card">
+    <div class="field-grid">
+      <div class="field">
+        <label>Gidrostrelka ichidagi tezlik <span class="unit">(m/s)</span></label>
+        <input type="number" id="V_strelka" value="0.1" step="0.01" min="0.01">
+      </div>
+      <div class="field">
+        <label>Ulanish quvuridagi tezlik <span class="unit">(m/s)</span></label>
+        <input type="number" id="V_potrub" value="0.7" step="0.01" min="0.01">
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Natija</div>
+  <div class="card" id="box-result"></div>
+
+  <div class="note">
+    Sarf: G(m³/soat) = 0,86 × Q(kVt) / ΔT. Diametr: D(mm) = √(4×G(m³/s) / (π×V)) × 1000. Standart loyiha tezliklari (0,1 m/s gidrostrelka ichida, 0,7 m/s ulanish quvurida) — ular oʻzgartirilishi mumkin, lekin odatda shu qiymatlar tavsiya etiladi.
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const ids = ['Q','t_pod','t_obr','V_strelka','V_potrub'];
+  const inputs = {}; ids.forEach(function(id){ inputs[id]=document.getElementById(id); });
+  const boxResult = document.getElementById('box-result');
+  const dtHint = document.getElementById('dt-hint');
+
+  function num(id){ const v=parseFloat(inputs[id].value); return isNaN(v)?0:v; }
+  function fmt(v,d){ if(v===null||v===undefined||isNaN(v)) return '—'; d=d===undefined?1:d; return v.toFixed(d); }
+  function row(container,k,v,unit,hi){
+    const r=document.createElement('div'); r.className='result-row'+(hi?' highlight':'');
+    r.innerHTML='<span class="k">'+k+'</span><span class="v">'+v+(unit?'<span class="unit">'+unit+'</span>':'')+'</span>';
+    container.appendChild(r);
+  }
+
+  function diameterMm(G_m3h, V){
+    if(G_m3h<=0 || V<=0) return 0;
+    const Q_m3s = G_m3h/3600;
+    const D_m = Math.sqrt(4*Q_m3s/(Math.PI*V));
+    return D_m*1000;
+  }
+
+  function recalc(){
+    const Q = num('Q');
+    const dT = num('t_pod') - num('t_obr');
+    dtHint.value = 'ΔT = ' + fmt(dT,1) + ' °C';
+
+    boxResult.innerHTML = '';
+    if(dT<=0){
+      row(boxResult, 'Natija', 'ΔT musbat boʻlishi kerak', '');
+      return;
+    }
+
+    const G_m3h = 0.86*Q/dT;
+    const G_ls = G_m3h/3.6;
+    const D_strelka = diameterMm(G_m3h, num('V_strelka'));
+    const D_potrub = diameterMm(G_m3h, num('V_potrub'));
+
+    row(boxResult, 'Issiqlik tashuvchi sarfi', fmt(G_m3h,3), 'm³/soat');
+    row(boxResult, 'Issiqlik tashuvchi sarfi', fmt(G_ls,3), 'l/s');
+    row(boxResult, 'Gidrostrelka diametri', fmt(D_strelka,0), 'mm', true);
+    row(boxResult, 'Ulanish quvuri diametri', fmt(D_potrub,0), 'mm', true);
+  }
+
+  ids.forEach(function(id){ inputs[id].addEventListener('input', recalc); });
+  recalc();
+})();
+</script>
+</body>
+</html>
