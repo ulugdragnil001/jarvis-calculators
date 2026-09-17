@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Boyler hisobi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0F1A; --surface:#101828; --surface-2:#141F33; --border:#223049; --border-soft:#1A2740;
+    --text:#E8EDF7; --text-muted:#8394AD; --text-faint:#54637E;
+    --accent:#F2A340; --accent-soft:rgba(242,163,64,0.12); --accent-strong:#F7B85C;
+    --water:#3B9EFF; --water-soft:rgba(59,158,255,0.12);
+    --danger:#F2555A; --danger-soft:rgba(242,85,90,0.12);
+    --computed-bg:#0D1626; --radius:10px;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#F3F6FB; --surface:#FFFFFF; --surface-2:#F7FAFD; --border:#D8E1EE; --border-soft:#E4EAF3;
+      --text:#101828; --text-muted:#5B6B85; --text-faint:#8C99B0;
+      --accent:#B36A0C; --accent-soft:rgba(179,106,12,0.08); --accent-strong:#8A5209;
+      --water:#1E7FE0; --water-soft:rgba(30,127,224,0.08);
+      --danger:#C5333A; --danger-soft:rgba(197,51,58,0.08);
+      --computed-bg:#EEF2F8;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A0F1A; --surface:#101828; --surface-2:#141F33; --border:#223049; --border-soft:#1A2740;
+    --text:#E8EDF7; --text-muted:#8394AD; --text-faint:#54637E;
+    --accent:#F2A340; --accent-soft:rgba(242,163,64,0.12); --accent-strong:#F7B85C;
+    --water:#3B9EFF; --water-soft:rgba(59,158,255,0.12);
+    --danger:#F2555A; --danger-soft:rgba(242,85,90,0.12);
+    --computed-bg:#0D1626;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:36px;
+  }
+  .app{max-width:720px;margin:0 auto;padding:14px 12px 0;}
+
+  .topbar{display:flex; align-items:center; gap:10px; padding:6px 2px 14px;}
+  .topbar .icon-back{
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--surface); color:var(--text-muted); flex-shrink:0; font-size:16px;
+  }
+  .topbar .title{font-size:16px; font-weight:600;}
+  .topbar .subtitle{font-size:12px; color:var(--text-muted); margin-top:1px;}
+
+  .section-label{
+    font-size:11.5px; font-weight:700; color:var(--accent);
+    letter-spacing:0.02em; margin:18px 2px 8px;
+  }
+  .section-label:first-of-type{margin-top:4px;}
+
+  .card{
+    background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius);
+    padding:12px; margin-bottom:10px;
+  }
+
+  .field-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .field{display:flex; flex-direction:column; gap:5px;}
+  .field label{font-size:11px; color:var(--text-muted); font-weight:500; line-height:1.3;}
+  .field .unit{color:var(--text-faint); font-weight:400;}
+  .field input{
+    background:var(--bg); border:1px solid var(--border); border-radius:7px; color:var(--text);
+    font-family:'JetBrains Mono',monospace; font-size:14px; padding:9px 10px; width:100%;
+  }
+  .field input:focus{outline:none; border-color:var(--accent); background:var(--accent-soft);}
+
+  .result-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:9px 0; border-bottom:1px solid var(--border-soft); gap:10px;
+  }
+  .result-row:last-child{border-bottom:none;}
+  .result-row .k{font-size:12.5px; color:var(--text-muted); line-height:1.35;}
+  .result-row .v{
+    font-family:'JetBrains Mono',monospace; font-size:14.5px; font-weight:700; color:var(--text);
+    white-space:nowrap; text-align:right;
+  }
+  .result-row .v .unit{font-size:11px; color:var(--text-faint); font-weight:400; margin-left:3px;}
+  .result-row.highlight .v{color:var(--accent-strong); font-size:17px;}
+
+  .warn{
+    background:var(--danger-soft); color:var(--danger); font-size:12px; font-weight:500;
+    border-radius:8px; padding:10px 11px; margin-bottom:10px;
+  }
+
+  table.norms{width:100%; border-collapse:collapse;}
+  table.norms thead th{
+    text-align:left; font-size:10.5px; font-weight:600; color:var(--text-muted);
+    padding:7px 6px; border-bottom:1px solid var(--border);
+  }
+  table.norms thead th:not(:first-child){text-align:right;}
+  table.norms tbody td{
+    padding:8px 6px; font-size:12.5px; border-bottom:1px solid var(--border-soft); color:var(--text);
+  }
+  table.norms tbody tr:nth-child(even) td{background:var(--surface-2);}
+  table.norms tbody td:not(:first-child){
+    text-align:right; font-family:'JetBrains Mono',monospace; font-weight:600; white-space:nowrap;
+  }
+  table.norms tbody td.flow{color:var(--water);}
+  table.norms tbody td.temp{color:var(--accent);}
+
+  .note{font-size:11.5px; color:var(--text-faint); padding:14px 4px 0; line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="icon-back">←</div>
+    <div>
+      <div class="title">Boyler hisobi</div>
+      <div class="subtitle">Teplopateriya boʻlimi</div>
+    </div>
+  </div>
+
+  <div class="section-label">Kirish parametrlari</div>
+  <div class="card">
+    <div class="field-grid">
+      <div class="field">
+        <label>Boyler hajmi <span class="unit">(litr)</span></label>
+        <input type="number" id="V" inputmode="decimal" value="100" min="0">
+      </div>
+      <div class="field">
+        <label>TEN (isitish elementi) quvvati <span class="unit">(kVt)</span></label>
+        <input type="number" id="P" inputmode="decimal" value="2.0" min="0" step="0.1">
+      </div>
+    </div>
+    <div class="field-grid" style="margin-top:10px;">
+      <div class="field">
+        <label>Sovuq suv kirish harorati <span class="unit">(°C)</span></label>
+        <input type="number" id="t_cold" inputmode="decimal" value="10">
+      </div>
+      <div class="field">
+        <label>Issiq suv foydalanish harorati <span class="unit">(°C)</span></label>
+        <input type="number" id="t_hot" inputmode="decimal" value="55">
+      </div>
+    </div>
+  </div>
+
+  <div id="warnBox"></div>
+
+  <div class="section-label">Natija</div>
+  <div class="card" id="box-result"></div>
+
+  <div class="section-label">Hammom jihozlari uchun normalar</div>
+  <div class="card">
+    <table class="norms">
+      <thead>
+        <tr><th>Jihoz</th><th>Sarf, l/min</th><th>Harorat, °C</th></tr>
+      </thead>
+      <tbody id="norms-body"></tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    Isitish uchun kerakli issiqlik va vaqt suvning solishtirma issiqlik sigʻimi asosida (1 litr suvni 1°C ga isitish uchun 1 kKal yoki 1,163 Vt·soat) avtomatik hisoblanadi. Jihozlar jadvali KMK 2.04.01-85* me'yorlariga asoslangan.
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const ids = ['V','P','t_cold','t_hot'];
+  const inputs = {};
+  ids.forEach(function(id){ inputs[id] = document.getElementById(id); });
+
+  function loadSaved(){
+    try{
+      const raw = localStorage.getItem('boyler_calc_state');
+      if(raw){
+        const s = JSON.parse(raw);
+        ids.forEach(function(id){ if(s[id] !== undefined) inputs[id].value = s[id]; });
+      }
+    }catch(e){ /* ignore */ }
+  }
+  function saveState(){
+    try{
+      const s = {};
+      ids.forEach(function(id){ s[id] = inputs[id].value; });
+      localStorage.setItem('boyler_calc_state', JSON.stringify(s));
+    }catch(e){ /* ignore */ }
+  }
+
+  function num(id){ const v = parseFloat(inputs[id].value); return isNaN(v) ? 0 : v; }
+  function fmt(v, d){
+    if(v === null || v === undefined || isNaN(v)) return '—';
+    d = d === undefined ? 2 : d;
+    return v.toFixed(d);
+  }
+  function row(container, k, v, unit, hi){
+    const r = document.createElement('div');
+    r.className = 'result-row' + (hi ? ' highlight' : '');
+    r.innerHTML = '<span class="k">'+k+'</span><span class="v">'+v+(unit ? '<span class="unit">'+unit+'</span>' : '')+'</span>';
+    container.appendChild(r);
+  }
+
+  function recalc(){
+    const V = num('V');
+    const P = num('P');
+    const t_cold = num('t_cold');
+    const t_hot = num('t_hot');
+    const dT = t_hot - t_cold;
+
+    const warnBox = document.getElementById('warnBox');
+    warnBox.innerHTML = '';
+    if(P <= 0){
+      warnBox.innerHTML = '<div class="warn">TEN quvvatini kiriting (0 dan katta) — aks holda isitish vaqti hisoblanmaydi.</div>';
+    }
+    if(dT <= 0){
+      warnBox.innerHTML += '<div class="warn">Issiq suv harorati sovuq suv haroratidan yuqori boʻlishi kerak.</div>';
+    }
+
+    const Q_kcal = V * dT;
+    const Q_wh = Q_kcal * 1.163;
+    const time_h = P > 0 ? Q_wh / (P * 1000) : 0;
+    const time_min = time_h * 60;
+
+    const box = document.getElementById('box-result');
+    box.innerHTML = '';
+    row(box, 'Kerakli issiqlik miqdori', fmt(Q_kcal,0), 'kKal');
+    row(box, 'Kerakli energiya', fmt(Q_wh,0), 'Vt·soat');
+    row(box, 'Suvni isitish vaqti', fmt(time_min,1), 'daqiqa', true);
+    row(box, 'Suvni isitish vaqti', fmt(time_h,2), 'soat');
+
+    saveState();
+  }
+
+  const norms = [
+    ['Dush', 12, 37],
+    ['Kuxnya mойka jumragi', 12, 40],
+    ['Tropik dush', 18, '—'],
+    ['Rakovina (yuvingich)', 6, 25],
+    ['Gigiyenik dush', 3, '—'],
+    ['Bide', 6, 37],
+    ['Umyvalnik + rakovina', 10, '—'],
+    ['Vanna / gidromassaj', 18, 37],
+    ['Vanna', 12, 37],
+    ['Suv olish krani 1/2"', 20, '—'],
+    ['Suv olish krani 3/4"', 25, '—']
+  ];
+  const normsBody = document.getElementById('norms-body');
+  norms.forEach(function(n){
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td>'+n[0]+'</td><td class="flow">'+n[1]+'</td><td class="temp">'+n[2]+'</td>';
+    normsBody.appendChild(tr);
+  });
+
+  loadSaved();
+  ids.forEach(function(id){ inputs[id].addEventListener('input', recalc); });
+  recalc();
+})();
+</script>
+</body>
+</html>
