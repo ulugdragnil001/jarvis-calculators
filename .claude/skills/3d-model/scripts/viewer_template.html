@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D model ko'ruvchi</title>
+<!-- jarvis-calculators uslubidagi ranglar; STL/GLB faylni sudrab tashlang yoki ?src=model.stl -->
+<style>
+  :root{--bg:#0A0F1A;--surface:#101828;--border:#223049;--text:#E8EDF7;--muted:#8394AD;--accent:#F2555A;--water:#3B9EFF;}
+  @media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--bg:#F3F6FB;--surface:#fff;--border:#D8E1EE;--text:#101828;--muted:#5B6B85;--accent:#C5333A;--water:#1E7FE0;}}
+  *{box-sizing:border-box} html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
+  .bar{display:flex;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface);font-size:13px;flex-wrap:wrap}
+  .bar b{color:var(--accent)} .bar span{color:var(--muted)} #dims{font-family:JetBrains Mono,monospace}
+  #view{width:100%;height:calc(100% - 46px);display:block}
+  button{background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:5px 10px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="bar"><b>3D ko'ruvchi</b><span id="name">fayl tanlanmagan — STL/GLB ni sudrab tashlang</span>
+  <span id="dims"></span><button id="fit">Markazga</button><button id="wire">Sim/Qattiq</button>
+  <input type="file" id="file" accept=".stl,.glb,.gltf,.obj" style="font-size:12px"></div>
+<canvas id="view"></canvas>
+<script type="importmap">{"imports":{"three":"https://cdnjs.cloudflare.com/ajax/libs/three.js/0.170.0/three.module.min.js",
+ "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+
+const canvas = document.getElementById('view');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true}); renderer.setPixelRatio(devicePixelRatio);
+const scene = new THREE.Scene();
+const dark = matchMedia('(prefers-color-scheme: dark)').matches; scene.background = new THREE.Color(dark?0x0A0F1A:0xF3F6FB);
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100000); camera.up.set(0,0,1);   // CAD: Z yuqoriga
+const controls = new OrbitControls(camera, canvas);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x334466, 1.1)); const dl = new THREE.DirectionalLight(0xffffff, 1.4); dl.position.set(1,1,2); scene.add(dl);
+const grid = new THREE.GridHelper(1000, 100, 0x3B9EFF, dark?0x223049:0xD8E1EE); grid.rotation.x = Math.PI/2; scene.add(grid);
+scene.add(new THREE.AxesHelper(100));
+let mesh = null, wire = false;
+const mat = new THREE.MeshStandardMaterial({color:0xF2555A, metalness:0.2, roughness:0.55});
+
+function resize(){ const w=canvas.clientWidth,h=canvas.clientHeight; if(canvas.width!==w||canvas.height!==h){renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();} }
+function fit(){ if(!mesh) return; const box=new THREE.Box3().setFromObject(mesh); const size=box.getSize(new THREE.Vector3()), c=box.getCenter(new THREE.Vector3());
+  const r=size.length()/2; camera.position.set(c.x+r*1.2, c.y-r*1.6, c.z+r*1.0); controls.target.copy(c); camera.near=r/100; camera.far=r*100; camera.updateProjectionMatrix(); controls.update();
+  document.getElementById('dims').textContent = `X ${size.x.toFixed(2)} × Y ${size.y.toFixed(2)} × Z ${size.z.toFixed(2)} mm`; }
+function setObj(obj, name){ if(mesh) scene.remove(mesh); mesh=obj; mesh.traverse(o=>{ if(o.isMesh){ o.material = mat; }}); scene.add(mesh); document.getElementById('name').textContent=name; fit(); }
+function loadBuffer(name, buf){
+  const ext = name.split('.').pop().toLowerCase();
+  if(ext==='stl'){ const g=new STLLoader().parse(buf); g.computeVertexNormals(); setObj(new THREE.Mesh(g, mat), name); }
+  else if(ext==='glb'||ext==='gltf'){ new GLTFLoader().parse(buf, '', r=>setObj(r.scene, name)); }
+  else if(ext==='obj'){ setObj(new OBJLoader().parse(new TextDecoder().decode(buf)), name); }
+}
+async function loadUrl(u){ const r=await fetch(u); loadBuffer(u.split('/').pop(), await r.arrayBuffer()); }
+document.getElementById('file').onchange = e => { const f=e.target.files[0]; f.arrayBuffer().then(b=>loadBuffer(f.name,b)); };
+addEventListener('dragover', e=>e.preventDefault()); addEventListener('drop', e=>{ e.preventDefault(); const f=e.dataTransfer.files[0]; if(f) f.arrayBuffer().then(b=>loadBuffer(f.name,b)); });
+document.getElementById('fit').onclick = fit;
+document.getElementById('wire').onclick = ()=>{ wire=!wire; mat.wireframe=wire; };
+const src = new URLSearchParams(location.search).get('src'); if(src) loadUrl(src);
+camera.position.set(300,-400,250); controls.target.set(0,0,0);
+(function loop(){ resize(); controls.update(); renderer.render(scene,camera); requestAnimationFrame(loop); })();
+</script>
+</body>
+</html>

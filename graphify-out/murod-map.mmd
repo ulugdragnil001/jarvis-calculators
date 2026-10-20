@@ -1,0 +1,326 @@
+graph LR
+  n0["Avtopoliv — Liniya hisobi"]
+  n10["DN (nominal diametr)"]
+  n11["G issiqlik tashuvchi sarfi"]
+  n12["Quvur"]
+  n13["Avtopoliv"]
+  n14["Boyler hisobi"]
+  n22["ΔT harorat napori"]
+  n23["Issiqlik yo'qotish Q"]
+  n24["Bosim / napor"]
+  n25["Hajm"]
+  n26["Boyler / suv isitgich"]
+  n27["Gidravlika hisobi"]
+  n45["Radiator"]
+  n46["Oqim tezligi V"]
+  n47["Devor issiqlik qarshiligi R"]
+  n48["Gidrostrelka hisobi"]
+  n57["Standart o'lcham"]
+  n58["Gidrostrelka"]
+  n59["Issiqlik almashtirgich hisobi"]
+  n68["Kengaytiruvchi bak hisobi"]
+  n81["Kengaytiruvchi bak"]
+  n82["Konvektor (ventilyatorli)"]
+  n91["Konvektor"]
+  n92["Konvektor (ventilyatorsiz)"]
+  n103["R — Devor issiqlik qarshiligi"]
+  n112["Radiator hisob-kitoblari"]
+  n132["skill 3d-model"]
+  n134["Po'lat quvur DN -> tashqi diametr (EN 10"]
+  n135["Suv-gaz quvuri GOST 3262 (ВГП) DN -> OD,"]
+  n136["PPR quvur (DIN 8077/8078) OD -> devor PN"]
+  n137["PEX / metall-plastik quvur OD x devor"]
+  n138["Mis quvur EN 1057 OD x devor"]
+  n139["G (BSP, ISO 228) quvur rezbasi — tashqi "]
+  n140["Metrik bolt/gayka (ISO 4014/4017, ISO 40"]
+  n141["Flanets PN16 (EN 1092-1) DN -> D tashqi,"]
+  n142["Panelli radiator (EN 442) — tip -> chuqu"]
+  n143["Seksiyali alyuminiy/bimetall radiator — "]
+  n144["Membranali kengaytiruvchi bak — hajm -> "]
+  n145["Gidrostrelka — '3D qoidasi' (klassik)"]
+  n146["Suv isitgich (boyler, vertikal) — hajm -"]
+  n147["List po'lat qalinliklari (standart qator"]
+  n148["Profil quvur (kvadrat) a x a x t — keng "]
+  n149["Profil quvur (to'g'ri burchak) a x b x t"]
+  n150["Rasmda masshtab uchun ishlatiladigan ma'"]
+  n151["G rezba (BSP)"]
+  n152["CadQuery (OpenCascade B-rep, STEP)"]
+  n153["Rasmdan o'lchash"]
+  n154["CAD dvigatel / B-rep"]
+  n156["trimesh (mesh tahlil)"]
+  n157["manifold3d (boolean)"]
+  n158["numpy"]
+  n159["three.js (WebGL ko'ruvchi)"]
+  n160["build123d"]
+  n161["OpenSCAD"]
+  n175["Pillow (rasm)"]
+  n176["viewer_template.html"]
+  n177["skill graphify"]
+  n178["graphify-out/ (bilim grafi)"]
+  n179["run_linear()"]
+  n180["homography()"]
+  n181["scale_from_image.py"]
+  n182["main()"]
+  n183["build()"]
+  n184["params()"]
+  n185["apply_h()"]
+  n186["apply_cli()"]
+  n187["build_graph.py"]
+  n188["diameter_mm()"]
+  n189["build()"]
+  n190["bbox_mesh()"]
+  n191["standard_sizes.py"]
+  n192["cmd_crop()"]
+  n193["export()"]
+  n194["nearest()"]
+  n195["copper_pipe_en1057 — Mis quvur EN 1057 O"]
+  n196["standard-sizes.md"]
+  n197["cmd_profile()"]
+  n198["openscad-patterns.md"]
+  n199["rows_as_dicts()"]
+  n200["pex_multilayer_pipe — PEX / metall-plast"]
+  n201["linear_scale()"]
+  n202["expansion_tank.py"]
+  n203["measure_image.py"]
+  n204["Teshik, naqsh, rezba o'rni"]
+  n205["params()"]
+  n206["verify()"]
+  n207["build()"]
+  n208["build()"]
+  n209["cmd_mark()"]
+  n210["main()"]
+  n211["cadquery-patterns.md"]
+  n212["Revolve, loft, sweep"]
+  n213["cmd_grid()"]
+  n214["to_markdown()"]
+  n215["sheet_metal — List po'lat qalinliklari ("]
+  n216["verify_model.py"]
+  n217["cmd_info()"]
+  n218["Bosqichlar"]
+  n219["Tez-tez uchraydigan xatolar"]
+  n220["Asosiy jismlar"]
+  n221["radiator_panel.py"]
+  n222["main()"]
+  n223["Tekshirish va eksport"]
+  n224["bbox()"]
+  n225["Minimal kod yodnomalari"]
+  n226["rect_tube — Profil quvur (to'g'ri burcha"]
+  n227["model_template.py"]
+  n228["gidrostrelka.py"]
+  n229["main()"]
+  n230["run_homography()"]
+  n231["build()"]
+  n232["cmd_edges()"]
+  n233["_pt()"]
+  n234["libraries.md"]
+  n235["Boolean, joylashtirish, oyna"]
+  n236["load()"]
+  n237["Fillet / chamfer / shell"]
+  n238["bbox_step()"]
+  n239["2D eskizdan (rasmdagi kontur) ekstruziya"]
+  n240["find()"]
+  n241["params()"]
+  n242["pipe_flange.py"]
+  n243["_font()"]
+  n244["_tables()"]
+  n245["image-to-dimensions.md"]
+  n246["draw_grid()"]
+  n247["params()"]
+  n0 -->|references| n10
+  n0 -->|references| n11
+  n0 -->|references| n12
+  n0 -->|references| n13
+  n14 -->|references| n22
+  n14 -->|references| n23
+  n14 -->|references| n24
+  n14 -->|references| n25
+  n14 -->|references| n26
+  n27 -->|references| n10
+  n27 -->|references| n22
+  n27 -->|references| n11
+  n27 -->|references| n12
+  n27 -->|references| n45
+  n27 -->|references| n46
+  n27 -->|references| n47
+  n27 -->|references| n13
+  n48 -->|references| n10
+  n48 -->|references| n22
+  n48 -->|references| n11
+  n48 -->|references| n23
+  n48 -->|references| n12
+  n48 -->|references| n46
+  n48 -->|references| n25
+  n48 -->|references| n57
+  n48 -->|references| n58
+  n59 -->|references| n22
+  n59 -->|references| n23
+  n59 -->|references| n25
+  n68 -->|references| n24
+  n68 -->|references| n25
+  n68 -->|references| n57
+  n68 -->|references| n81
+  n82 -->|references| n22
+  n82 -->|references| n23
+  n82 -->|references| n24
+  n82 -->|references| n91
+  n92 -->|references| n10
+  n92 -->|references| n22
+  n92 -->|references| n23
+  n92 -->|references| n24
+  n92 -->|references| n91
+  n103 -->|references| n23
+  n103 -->|references| n47
+  n112 -->|references| n10
+  n112 -->|references| n22
+  n112 -->|references| n23
+  n112 -->|references| n12
+  n112 -->|references| n45
+  n112 -->|references| n24
+  n136 -->|references| n0
+  n136 -->|references| n27
+  n142 -->|references| n112
+  n143 -->|references| n112
+  n144 -->|references| n68
+  n145 -->|references| n48
+  n146 -->|references| n14
+  n211 -->|references| n152
+  n211 -->|references| n12
+  n211 -->|references| n153
+  n211 -->|references| n154
+  n245 -->|references| n150
+  n245 -->|references| n10
+  n245 -->|references| n12
+  n245 -->|references| n45
+  n245 -->|references| n25
+  n245 -->|references| n151
+  n245 -->|references| n57
+  n245 -->|references| n153
+  n234 -->|references| n152
+  n234 -->|references| n156
+  n234 -->|references| n157
+  n234 -->|references| n158
+  n234 -->|references| n159
+  n234 -->|references| n160
+  n234 -->|references| n161
+  n234 -->|references| n24
+  n234 -->|references| n25
+  n234 -->|references| n153
+  n234 -->|references| n154
+  n198 -->|references| n161
+  n198 -->|references| n154
+  n196 -->|references| n134
+  n196 -->|references| n135
+  n196 -->|references| n136
+  n196 -->|references| n137
+  n196 -->|references| n138
+  n196 -->|references| n139
+  n196 -->|references| n140
+  n196 -->|references| n141
+  n196 -->|references| n142
+  n196 -->|references| n143
+  n196 -->|references| n144
+  n196 -->|references| n145
+  n196 -->|references| n146
+  n196 -->|references| n147
+  n196 -->|references| n148
+  n196 -->|references| n149
+  n196 -->|references| n150
+  n196 -->|references| n68
+  n196 -->|references| n27
+  n196 -->|references| n112
+  n196 -->|references| n48
+  n196 -->|references| n14
+  n196 -->|references| n0
+  n196 -->|references| n10
+  n196 -->|references| n23
+  n196 -->|references| n12
+  n196 -->|references| n45
+  n196 -->|references| n46
+  n196 -->|references| n25
+  n196 -->|references| n151
+  n196 -->|references| n57
+  n196 -->|references| n91
+  n196 -->|references| n26
+  n196 -->|references| n81
+  n196 -->|references| n58
+  n196 -->|references| n13
+  n202 -->|imports| n152
+  n202 -->|imports| n191
+  n202 -->|references| n144
+  n202 -->|references| n139
+  n202 -->|references| n68
+  n202 -->|references| n24
+  n202 -->|references| n25
+  n202 -->|references| n151
+  n202 -->|references| n57
+  n202 -->|references| n81
+  n202 -->|references| n154
+  n228 -->|imports| n152
+  n228 -->|imports| n191
+  n228 -->|references| n134
+  n228 -->|references| n48
+  n228 -->|references| n10
+  n228 -->|references| n22
+  n228 -->|references| n11
+  n228 -->|references| n23
+  n228 -->|references| n12
+  n228 -->|references| n46
+  n228 -->|references| n24
+  n228 -->|references| n25
+  n228 -->|references| n57
+  n228 -->|references| n58
+  n228 -->|references| n154
+  n242 -->|imports| n152
+  n242 -->|imports| n191
+  n242 -->|references| n134
+  n242 -->|references| n141
+  n242 -->|references| n140
+  n242 -->|references| n10
+  n242 -->|references| n12
+  n242 -->|references| n24
+  n242 -->|references| n57
+  n242 -->|references| n154
+  n221 -->|imports| n152
+  n221 -->|imports| n191
+  n221 -->|references| n142
+  n221 -->|references| n139
+  n221 -->|references| n112
+  n221 -->|references| n10
+  n221 -->|references| n45
+  n221 -->|references| n24
+  n221 -->|references| n151
+  n221 -->|references| n57
+  n221 -->|references| n91
+  n221 -->|references| n154
+  n203 -->|imports| n175
+  n203 -->|references| n153
+  n227 -->|imports| n152
+  n227 -->|references| n140
+  n227 -->|references| n24
+  n227 -->|references| n57
+  n227 -->|references| n153
+  n227 -->|references| n154
+  n181 -->|imports| n158
+  n181 -->|references| n153
+  n191 -->|references| n134
+  n191 -->|references| n12
+  n191 -->|references| n57
+  n216 -->|references| n25
+  n216 -->|references| n154
+  n176 -->|imports| n159
+  n187 -->|writes| n178
+  n112 -->|related| n142
+  n112 -->|related| n143
+  n112 -->|modeled_by| n221
+  n48 -->|related| n145
+  n48 -->|modeled_by| n228
+  n48 -->|related| n134
+  n68 -->|related| n144
+  n68 -->|modeled_by| n202
+  n0 -->|related| n136
+  n27 -->|related| n136
+  n27 -->|related| n134
+  n14 -->|related| n146
+  n112 -->|related| n139
+  n141 -->|modeled_by| n242
+  n134 -->|modeled_by| n242
