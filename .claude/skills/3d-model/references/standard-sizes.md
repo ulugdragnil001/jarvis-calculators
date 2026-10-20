@@ -1,0 +1,279 @@
+# Standart o'lchamlar bazasi
+
+Manba fayl: `data/standard_sizes.json` (bu fayl `standard_sizes.py md` bilan avtomatik hosil qilinadi — qo'lda tahrirlamang).
+
+Standart o'lchamlar bazasi. 'approx': true bo'lgan jadvallar ishlab chiqaruvchiga qarab farq qiladi — aniq chizma bo'lsa chizmani oling. Manba standarti har jadvalda ko'rsatilgan.
+
+Qidiruv: `standard_sizes.py nearest <jadval> <ustun> <qiymat> [up|down]`, `find`, `show`.
+
+## steel_pipe_en10220 — Po'lat quvur DN -> tashqi diametr (EN 10220 / ISO 4200)
+
+| DN | OD | wall_typical |
+|---|---|---|
+| 6 | 10.2 | 2.0 |
+| 8 | 13.5 | 2.3 |
+| 10 | 17.2 | 2.3 |
+| 15 | 21.3 | 2.6 |
+| 20 | 26.9 | 2.6 |
+| 25 | 33.7 | 3.2 |
+| 32 | 42.4 | 3.2 |
+| 40 | 48.3 | 3.2 |
+| 50 | 60.3 | 3.6 |
+| 65 | 76.1 | 3.6 |
+| 80 | 88.9 | 4.0 |
+| 100 | 114.3 | 4.5 |
+| 125 | 139.7 | 4.5 |
+| 150 | 168.3 | 4.5 |
+| 200 | 219.1 | 6.3 |
+| 250 | 273.0 | 6.3 |
+| 300 | 323.9 | 7.1 |
+| 350 | 355.6 | 8.0 |
+| 400 | 406.4 | 8.8 |
+| 500 | 508.0 | 11.0 |
+| 600 | 610.0 | 12.5 |
+
+## steel_pipe_gost3262 — Suv-gaz quvuri GOST 3262 (ВГП) DN -> OD, devor (oddiy/mustahkam)
+
+| DN | OD | wall_normal | wall_reinforced |
+|---|---|---|---|
+| 15 | 21.3 | 2.8 | 3.2 |
+| 20 | 26.8 | 2.8 | 3.2 |
+| 25 | 33.5 | 3.2 | 4.0 |
+| 32 | 42.3 | 3.2 | 4.0 |
+| 40 | 48.0 | 3.5 | 4.0 |
+| 50 | 60.0 | 3.5 | 4.5 |
+| 65 | 75.5 | 4.0 | 4.5 |
+| 80 | 88.5 | 4.0 | 4.5 |
+| 100 | 114.0 | 4.5 | 5.0 |
+
+## ppr_pipe — PPR quvur (DIN 8077/8078) OD -> devor PN10 (SDR11) / PN20 (SDR6)
+
+| OD | wall_PN10 | wall_PN20 |
+|---|---|---|
+| 20 | 1.9 | 3.4 |
+| 25 | 2.3 | 4.2 |
+| 32 | 2.9 | 5.4 |
+| 40 | 3.7 | 6.7 |
+| 50 | 4.6 | 8.3 |
+| 63 | 5.8 | 10.5 |
+| 75 | 6.8 | 12.5 |
+| 90 | 8.2 | 15.0 |
+| 110 | 10.0 | 18.3 |
+| 125 | 11.4 | 20.8 |
+| 160 | 14.6 | 26.6 |
+- see_also: avtopoliv.html va gidravlika.html ichidagi PIPE_TABLE shu qatorga mos (PN20)
+
+## pex_multilayer_pipe — PEX / metall-plastik quvur OD x devor
+
+| OD | wall |
+|---|---|
+| 16 | 2.0 |
+| 20 | 2.0 |
+| 25 | 2.5 |
+| 26 | 3.0 |
+| 32 | 3.0 |
+| 40 | 3.5 |
+| 50 | 4.0 |
+| 63 | 4.5 |
+
+## copper_pipe_en1057 — Mis quvur EN 1057 OD x devor
+
+| OD | wall |
+|---|---|
+| 10 | 1.0 |
+| 12 | 1.0 |
+| 15 | 1.0 |
+| 18 | 1.0 |
+| 22 | 1.0 |
+| 28 | 1.5 |
+| 35 | 1.5 |
+| 42 | 1.5 |
+| 54 | 2.0 |
+| 64 | 2.0 |
+| 76.1 | 2.0 |
+| 88.9 | 2.0 |
+| 108 | 2.5 |
+
+## thread_g_bsp — G (BSP, ISO 228) quvur rezbasi — tashqi diametr, qadam
+
+| size | major_d | tpi | pitch | minor_d |
+|---|---|---|---|---|
+| G1/8 | 9.728 | 28 | 0.907 | 8.566 |
+| G1/4 | 13.157 | 19 | 1.337 | 11.445 |
+| G3/8 | 16.662 | 19 | 1.337 | 14.95 |
+| G1/2 | 20.955 | 14 | 1.814 | 18.631 |
+| G3/4 | 26.441 | 14 | 1.814 | 24.117 |
+| G1 | 33.249 | 11 | 2.309 | 30.291 |
+| G1 1/4 | 41.91 | 11 | 2.309 | 38.952 |
+| G1 1/2 | 47.803 | 11 | 2.309 | 44.845 |
+| G2 | 59.614 | 11 | 2.309 | 56.656 |
+| G2 1/2 | 75.184 | 11 | 2.309 | 72.226 |
+| G3 | 87.884 | 11 | 2.309 | 84.926 |
+
+## metric_bolt_iso — Metrik bolt/gayka (ISO 4014/4017, ISO 4032, ISO 273 o'rta teshik)
+
+| size | d | pitch | head_af | head_h | nut_h | clearance_hole |
+|---|---|---|---|---|---|---|
+| M3 | 3 | 0.5 | 5.5 | 2.0 | 2.4 | 3.4 |
+| M4 | 4 | 0.7 | 7 | 2.8 | 3.2 | 4.5 |
+| M5 | 5 | 0.8 | 8 | 3.5 | 4.7 | 5.5 |
+| M6 | 6 | 1.0 | 10 | 4.0 | 5.2 | 6.6 |
+| M8 | 8 | 1.25 | 13 | 5.3 | 6.8 | 9.0 |
+| M10 | 10 | 1.5 | 16 | 6.4 | 8.4 | 11.0 |
+| M12 | 12 | 1.75 | 18 | 7.5 | 10.8 | 13.5 |
+| M14 | 14 | 2.0 | 21 | 8.8 | 12.8 | 15.5 |
+| M16 | 16 | 2.0 | 24 | 10.0 | 14.8 | 17.5 |
+| M20 | 20 | 2.5 | 30 | 12.5 | 18.0 | 22.0 |
+| M24 | 24 | 3.0 | 36 | 15.0 | 21.5 | 26.0 |
+| M30 | 30 | 3.5 | 46 | 18.7 | 25.6 | 33.0 |
+
+## flange_pn16_en1092 — Flanets PN16 (EN 1092-1) DN -> D tashqi, K bolt doirasi, n x teshik, bolt
+
+| DN | D | K | n_holes | hole_d | bolt | thickness_type11 |
+|---|---|---|---|---|---|---|
+| 15 | 95 | 65 | 4 | 14 | M12 | 16 |
+| 20 | 105 | 75 | 4 | 14 | M12 | 18 |
+| 25 | 115 | 85 | 4 | 14 | M12 | 18 |
+| 32 | 140 | 100 | 4 | 18 | M16 | 18 |
+| 40 | 150 | 110 | 4 | 18 | M16 | 18 |
+| 50 | 165 | 125 | 4 | 18 | M16 | 20 |
+| 65 | 185 | 145 | 8 | 18 | M16 | 20 |
+| 80 | 200 | 160 | 8 | 18 | M16 | 20 |
+| 100 | 220 | 180 | 8 | 18 | M16 | 22 |
+| 125 | 250 | 210 | 8 | 18 | M16 | 22 |
+| 150 | 285 | 240 | 8 | 22 | M20 | 24 |
+| 200 | 340 | 295 | 12 | 22 | M20 | 26 |
+| 250 | 405 | 355 | 12 | 26 | M24 | 29 |
+| 300 | 460 | 410 | 12 | 26 | M24 | 32 |
+- note: DN65 PN16: EN 1092-1 = 8 teshik, eski DIN 2501 = 4 teshik. Rasmda teshiklarni sanang.
+
+## panel_radiator — Panelli radiator (EN 442) — tip -> chuqurlik, panel/konvektor soni *(taxminiy)*
+
+| type | depth | panels | convectors |
+|---|---|---|---|
+| 10 | 47 | 1 | 0 |
+| 11 | 61 | 1 | 1 |
+| 20 | 66 | 2 | 0 |
+| 21 | 66 | 2 | 1 |
+| 22 | 100 | 2 | 2 |
+| 30 | 105 | 3 | 0 |
+| 33 | 155 | 3 | 3 |
+- heights: `300, 400, 500, 600, 900`
+- lengths: `400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000`
+- connection.thread: G1/2
+- connection.side_conn_center_spacing: H - 50 (masalan H500 -> 450)
+- connection.bottom_valve_spacing: 50
+- connection.bottom_conn_offset_from_end: 50
+- mounting.wall_gap: 30
+- mounting.floor_gap_min: 100
+- mounting.window_sill_gap_min: 50
+- see_also: radiator.html PANELS jadvali (Royal Thermo, LIDER, AKFA — issiqlik quvvati)
+
+## sectional_radiator — Seksiyali alyuminiy/bimetall radiator — markazlararo masofa -> seksiya o'lchami *(taxminiy)*
+
+| center_distance | section_height | section_width | section_depth |
+|---|---|---|---|
+| 200 | 260 | 80 | 90 |
+| 350 | 420 | 80 | 85 |
+| 500 | 570 | 80 | 90 |
+| 800 | 870 | 80 | 90 |
+- connection.thread: G1 (seksiya)
+- connection.reducer_to: G1/2 yoki G3/4
+- connection.nipple: G1 ikki tomonlama
+- see_also: radiator.html ALU / BIM jadvallari (bir seksiya quvvati, Vt)
+
+## expansion_tank_membrane — Membranali kengaytiruvchi bak — hajm -> diametr, balandlik, ulanish *(taxminiy)*
+
+| volume_l | diameter | height | connection |
+|---|---|---|---|
+| 8 | 200 | 310 | G3/4 |
+| 12 | 280 | 300 | G3/4 |
+| 18 | 280 | 400 | G3/4 |
+| 24 | 280 | 490 | G3/4 |
+| 35 | 354 | 465 | G3/4 |
+| 50 | 354 | 605 | G3/4 |
+| 60 | 409 | 605 | G1 |
+| 80 | 450 | 765 | G1 |
+| 100 | 450 | 860 | G1 |
+| 150 | 500 | 1000 | G1 |
+| 200 | 550 | 1070 | G1 |
+| 300 | 630 | 1240 | G1 |
+| 500 | 750 | 1480 | G1 |
+- see_also: kengaytiruvchi_bak.html STANDARD_SIZES = [8,12,18,24,35,50,60,80,100,150,200,300,500]
+
+## hydraulic_separator_rule — Gidrostrelka — '3D qoidasi' (klassik) *(taxminiy)*
+
+- rules.D: gidrostrelka diametri = 3 x d (ulanish quvuri ichki diametri) yoki gidrostrelka.html formulasi: D = sqrt(4*G/(pi*V))
+- rules.nozzle_spacing: patrubkalar orasi = 3D
+- rules.top_bottom_margin: yuqori/pastki patrubkadan qopqoqqa = 1.5D..2D
+- rules.total_height: ~ 3D*? -> odatda 6D..8D (ulanishlar sonidan)
+- rules.velocity_in_separator: V_strelka = 0.1 m/s (gidrostrelka.html default)
+- rules.velocity_in_pipe: V_potrub = 0.7..1.0 m/s
+- see_also: gidrostrelka.html diameterMm(G, V)
+
+## storage_boiler — Suv isitgich (boyler, vertikal) — hajm -> diametr, balandlik *(taxminiy)*
+
+| volume_l | diameter | height |
+|---|---|---|
+| 30 | 400 | 500 |
+| 50 | 450 | 580 |
+| 80 | 450 | 780 |
+| 100 | 450 | 920 |
+| 120 | 450 | 1070 |
+| 150 | 500 | 1150 |
+| 200 | 550 | 1300 |
+| 300 | 600 | 1600 |
+- see_also: boyler.html V (hajm) kiritmasi
+
+## sheet_metal — List po'lat qalinliklari (standart qator)
+
+`0.5, 0.7, 0.8, 1.0, 1.2, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0`
+
+## square_tube — Profil quvur (kvadrat) a x a x t — keng tarqalgan
+
+| a | t |
+|---|---|
+| 15 | 1.5 |
+| 20 | 1.5 |
+| 20 | 2.0 |
+| 25 | 2.0 |
+| 30 | 2.0 |
+| 40 | 2.0 |
+| 40 | 3.0 |
+| 50 | 3.0 |
+| 60 | 3.0 |
+| 80 | 4.0 |
+| 100 | 4.0 |
+
+## rect_tube — Profil quvur (to'g'ri burchak) a x b x t
+
+| a | b | t |
+|---|---|---|
+| 40 | 20 | 2.0 |
+| 50 | 25 | 2.0 |
+| 60 | 30 | 2.0 |
+| 60 | 40 | 3.0 |
+| 80 | 40 | 3.0 |
+| 100 | 50 | 3.0 |
+| 120 | 60 | 4.0 |
+
+## reference_objects — Rasmda masshtab uchun ishlatiladigan ma'lum o'lchamli narsalar
+
+| object | dim_a | dim_b | dim_c | note |
+|---|---|---|---|---|
+| A4 qog'oz | 210 | 297 | 0 | aniq |
+| Bank kartasi | 85.6 | 53.98 | 0.76 | ISO 7810 ID-1, aniq |
+| G'isht (GOST 530) | 250 | 120 | 65 | aniq |
+| Gazoblok | 600 | 300 | 200 | keng tarqalgan |
+| Shlakoblok | 390 | 190 | 190 | keng tarqalgan |
+| Eshik (ichki) | 2000 | 800 | 0 | yoki 700/900 kenglik |
+| Rozetka ramkasi | 86 | 86 | 0 | 80x80 ham bo'ladi |
+| Keramik plitka | 300 | 300 | 0 | 600x600, 300x600 ham |
+| Euro pallet | 1200 | 800 | 144 | aniq |
+| Plastik butilka 1.5 l | 90 | 320 | 0 | taxminan |
+| Plastik butilka 0.5 l | 65 | 215 | 0 | taxminan |
+| Smartfon | 72 | 150 | 8 | taxminan |
+| Rulon o'lchagich korpusi | 60 | 65 | 30 | taxminan |
+| Radiator ulanish G1/2 | 20.955 | 0 | 0 | rezba tashqi d |
+| Panel radiator balandligi | 500 | 0 | 0 | eng ko'p uchraydi; 300/400/600/900 |
+

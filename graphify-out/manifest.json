@@ -1,0 +1,194 @@
+{
+  ".claude/settings.json": {
+    "mtime": 1792497964.8387864,
+    "seen": 1792497965.2476468,
+    "ast_hash": "3b541b9935fcf0831355da956f897645",
+    "semantic_hash": ""
+  },
+  ".claude/CLAUDE.md": {
+    "mtime": 1792497964.8383381,
+    "seen": 1792497965.247654,
+    "ast_hash": "9b31786b637be3c13978bec4c2330752",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1792497964.8386152,
+    "seen": 1792497965.247657,
+    "ast_hash": "67d88e9d0760c3ba54c75dfd9551c1c5",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1792497482.1065412,
+    "seen": 1792497965.2476587,
+    "ast_hash": "ae16f25c3add27ccba9314077b724397",
+    "semantic_hash": ""
+  },
+  "avtopoliv.html": {
+    "mtime": 1792497482.1065412,
+    "seen": 1792497965.2476604,
+    "ast_hash": "a029e57c29135d7903c4f3a8547c71fd",
+    "semantic_hash": ""
+  },
+  "boyler.html": {
+    "mtime": 1792497482.1065412,
+    "seen": 1792497965.2476616,
+    "ast_hash": "eed11115594907e7e99df5222d7cbf8f",
+    "semantic_hash": ""
+  },
+  "gidravlika.html": {
+    "mtime": 1792497482.1065412,
+    "seen": 1792497965.2476628,
+    "ast_hash": "2e9c87cf79a6d11354a5a6c78003271a",
+    "semantic_hash": ""
+  },
+  "gidrostrelka.html": {
+    "mtime": 1792497482.1065412,
+    "seen": 1792497965.247664,
+    "ast_hash": "57bf98686f55c2f5e9e313a7c00e921b",
+    "semantic_hash": ""
+  },
+  "issiqlik_almashtirgich.html": {
+    "mtime": 1792497482.1065412,
+    "seen": 1792497965.2476652,
+    "ast_hash": "5e3f4a086b52c5179bdade0e31632e3b",
+    "semantic_hash": ""
+  },
+  "kengaytiruvchi_bak.html": {
+    "mtime": 1792497482.1065412,
+    "seen": 1792497965.2476661,
+    "ast_hash": "98a6498df26da6dc17b9fa8825727b40",
+    "semantic_hash": ""
+  },
+  "konvektor_ventilyatorli.html": {
+    "mtime": 1792497482.1065412,
+    "seen": 1792497965.2476678,
+    "ast_hash": "920a5023b244e6de10e064036df35fe6",
+    "semantic_hash": ""
+  },
+  "konvektor_ventilyatorsiz.html": {
+    "mtime": 1792497482.1065412,
+    "seen": 1792497965.247669,
+    "ast_hash": "c2bfe91705191786a085b3cd545b9951",
+    "semantic_hash": ""
+  },
+  "r_devor_issiqlik.html": {
+    "mtime": 1792497482.1065412,
+    "seen": 1792497965.24767,
+    "ast_hash": "970883285070e48e77d03b8de112ee55",
+    "semantic_hash": ""
+  },
+  "radiator.html": {
+    "mtime": 1792497482.1065412,
+    "seen": 1792497965.2476714,
+    "ast_hash": "390f7aa5b645f747951b27a2e58209dc",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/data/standard_sizes.json": {
+    "mtime": 1792498177.6371508,
+    "seen": 1792498840.9297898,
+    "ast_hash": "a4bbb0851c778a042c466695cf5754f1",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/scripts/examples/expansion_tank.py": {
+    "mtime": 1792498355.2807148,
+    "seen": 1792498840.9297934,
+    "ast_hash": "cf73937fe1ed9ea55accdf2615beea39",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/scripts/examples/gidrostrelka.py": {
+    "mtime": 1792498355.2791257,
+    "seen": 1792498840.929795,
+    "ast_hash": "f6a34b5f5464c1c10873afd6b0df4488",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/scripts/examples/pipe_flange.py": {
+    "mtime": 1792498355.2771964,
+    "seen": 1792498840.9297967,
+    "ast_hash": "ade136b45867d93678e08807850ae535",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/scripts/examples/radiator_panel.py": {
+    "mtime": 1792498545.5770376,
+    "seen": 1792498840.929798,
+    "ast_hash": "fde88fda4dd1ad36a6fe95eaa70eab5d",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/scripts/measure_image.py": {
+    "mtime": 1792498449.0924401,
+    "seen": 1792498840.929799,
+    "ast_hash": "dfe15365b4ac3b41130c3496d531f724",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/scripts/model_template.py": {
+    "mtime": 1792498355.2732146,
+    "seen": 1792498840.9298003,
+    "ast_hash": "0bf764fe0fd088bcc2c1bf47579319ea",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/scripts/scale_from_image.py": {
+    "mtime": 1792498266.125156,
+    "seen": 1792498840.9298017,
+    "ast_hash": "5412aa5bb5a7baadfcbc7d86b17f7039",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/scripts/standard_sizes.py": {
+    "mtime": 1792498805.213818,
+    "seen": 1792498840.9298036,
+    "ast_hash": "21d4c384074cbad615bcbcdf1d64d92a",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/scripts/verify_model.py": {
+    "mtime": 1792498266.1301386,
+    "seen": 1792498840.9298048,
+    "ast_hash": "90b8d3db5a9c1aec2b450e6981f0a244",
+    "semantic_hash": ""
+  },
+  "tools/build_graph.py": {
+    "mtime": 1792498804.957188,
+    "seen": 1792498840.929806,
+    "ast_hash": "f68f4e2147f3945df9719b23e56a129e",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/SKILL.md": {
+    "mtime": 1792498804.925188,
+    "seen": 1792498840.9298108,
+    "ast_hash": "e30ddbe5b5fca35bf4075e743780adc2",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/references/cadquery-patterns.md": {
+    "mtime": 1792498644.7691784,
+    "seen": 1792498840.929812,
+    "ast_hash": "158a79347946508e3de2bb4b6672d7e7",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/references/image-to-dimensions.md": {
+    "mtime": 1792498644.8091786,
+    "seen": 1792498840.9298131,
+    "ast_hash": "6d398a159cb39bc8b11d56f1fdd71768",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/references/libraries.md": {
+    "mtime": 1792498644.7469714,
+    "seen": 1792498840.9298143,
+    "ast_hash": "468c0305e2814053284ed599ce3aacf3",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/references/openscad-patterns.md": {
+    "mtime": 1792498644.7851784,
+    "seen": 1792498840.9298155,
+    "ast_hash": "0bfc9d2495b117cb8fe0b9f584d931a5",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/references/standard-sizes.md": {
+    "mtime": 1792498805.241188,
+    "seen": 1792498840.9298165,
+    "ast_hash": "f2b556fc74f80d9d5ac8595dcb027c41",
+    "semantic_hash": ""
+  },
+  ".claude/skills/3d-model/scripts/viewer_template.html": {
+    "mtime": 1792498457.801045,
+    "seen": 1792498840.929818,
+    "ast_hash": "f0b45bccda0ab2ab2ef504fb0dfd3cfc",
+    "semantic_hash": ""
+  }
+}
