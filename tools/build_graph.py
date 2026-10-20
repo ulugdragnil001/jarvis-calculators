@@ -304,7 +304,7 @@ def merge_and_write(no_html=False):
         g["built_at_commit"] = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip() or g.get("built_at_commit")
     except Exception:
         pass
-    gpath.write_text(json.dumps(g, ensure_ascii=False, indent=1), encoding="utf-8")
+    gpath.write_text(json.dumps(g, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     write_report(cids, uniq)
     write_murod_map(uniq)
     if not no_html:
@@ -365,7 +365,7 @@ def write_murod_map(uniq):
     mm = {"schema": "murod-map/1", "source": "jarvis-calculators", "builder": "tools/build_graph.py",
           "nodes": [{"id": n["id"], "label": n["label"], "kind": n.get("node_kind") or "symbol", "group": n.get("community_name", ""), "file": n.get("source_file", ""), "line": n.get("source_location", "")} for n in list(nodes.values()) + extra],
           "edges": [{"from": e["source"], "to": e["target"], "rel": e["relation"], **({"note": e["note"]} if e.get("note") else {})} for e in uniq]}
-    (OUT / "murod-map.json").write_text(json.dumps(mm, ensure_ascii=False, indent=1), encoding="utf-8")
+    (OUT / "murod-map.json").write_text(json.dumps(mm, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     # Mermaid: faqat yuqori daraja (kalkulyator, jadval, skill, misol, kutubxona, tushuncha) — o'qiladigan bo'lsin
     top_kinds = {"calculator", "standard_table", "skill", "script", "library", "concept", "reference", "tool", "artifact"}
     pool = list(nodes.values()) + extra
